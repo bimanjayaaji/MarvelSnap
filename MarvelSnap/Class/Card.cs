@@ -1,3 +1,4 @@
+using System.Security.Authentication.ExtendedProtection;
 using MarvelSnapEnum;
 using MarvelSnapInterface;
 namespace MarvelSnap;
@@ -10,6 +11,10 @@ public abstract class Card : ICard, ICardAbility
 	protected int _energyCost;
 	protected int _attackingPower;
 	protected string? _description;
+	
+	//TODO
+	//bikin constructor buat init semua variabel untuk kemudian langsung dipake sama child class
+	//buat description bikin method abstract yang ngereturn string aja
 	
 	public int GetId()
 	{
