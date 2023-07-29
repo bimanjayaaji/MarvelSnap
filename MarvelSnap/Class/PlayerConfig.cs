@@ -11,7 +11,7 @@ public class PlayerConfig
 		// need to be analysed more
 	}
 	
-	public List<Card> GetCardDeck()
+	public List<Card>? GetCardDeck()
 	{
 		return _cardDeck;
 	}

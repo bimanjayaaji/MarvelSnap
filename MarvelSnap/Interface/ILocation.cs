@@ -1,9 +1,10 @@
-namespace MarvelSnap;
+using MarvelSnapEnum;
+namespace MarvelSnapInterface;
 
 public interface ILocation
 {
 	int GetId();
-	string GetName();
+	string? GetName();
 	LocationType GetType();
-	string GetDesc();
+	string? GetDesc();
 }

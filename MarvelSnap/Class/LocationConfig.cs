@@ -1,3 +1,5 @@
+using MarvelSnapEnum;
+using MarvelSnapInterface;
 namespace MarvelSnap;
 
 public class LocationConfig

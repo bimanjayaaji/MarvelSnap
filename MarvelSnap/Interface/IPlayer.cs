@@ -1,9 +1,9 @@
-namespace MarvelSnap;
+namespace MarvelSnapInterface;
 
 public interface IPlayer
 {
 	int GetId();
-	string GetName();
+	string? GetName();
 	bool SetId(int id);
 	bool SetName(string name);
 }

@@ -1,3 +1,5 @@
+using MarvelSnapEnum;
+using MarvelSnapInterface;
 namespace MarvelSnap;
 
 public abstract class Location : ILocation
@@ -7,7 +9,7 @@ public abstract class Location : ILocation
 	protected LocationType _type;
 	protected string? _description;
 	
-	public string GetDesc()
+	public string? GetDesc()
 	{
 		return _description;
 	}
@@ -17,7 +19,7 @@ public abstract class Location : ILocation
 		return _id;
 	}
 
-	public string GetName()
+	public string? GetName()
 	{
 		return _name;
 	}

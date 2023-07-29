@@ -1,3 +1,4 @@
+using MarvelSnapInterface;
 namespace MarvelSnap;
 
 public class HumanPlayer : IPlayer
@@ -10,7 +11,7 @@ public class HumanPlayer : IPlayer
 		return _id;
 	}
 
-	public string GetName()
+	public string? GetName()
 	{
 		return _name;
 	}

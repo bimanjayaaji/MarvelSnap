@@ -1,9 +1,10 @@
-namespace MarvelSnap;
+using MarvelSnapEnum;
+namespace MarvelSnapInterface;
 
 public interface ICardAbility
 {
 	CardType GetType();
-	string GetDesc();
+	string? GetDesc();
 	int GetEnergyCost();
 	int GetAttackingPower();
 	bool SetEnergyCost(int energy);

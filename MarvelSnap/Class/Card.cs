@@ -1,3 +1,5 @@
+using MarvelSnapEnum;
+using MarvelSnapInterface;
 namespace MarvelSnap;
 
 public abstract class Card : ICard, ICardAbility
@@ -14,7 +16,7 @@ public abstract class Card : ICard, ICardAbility
 		return _id;
 	}
 	
-	public string GetName()
+	public string? GetName()
 	{
 		return _name;
 	}
@@ -24,7 +26,7 @@ public abstract class Card : ICard, ICardAbility
 		return _type;
 	}
 	
-	public string GetDesc()
+	public string? GetDesc()
 	{
 		return _description;
 	}

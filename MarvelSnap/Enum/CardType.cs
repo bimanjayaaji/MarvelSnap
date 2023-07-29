@@ -1,4 +1,4 @@
-namespace MarvelSnap;
+namespace MarvelSnapEnum;
 
 public enum CardType
 {
