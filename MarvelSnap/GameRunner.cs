@@ -53,5 +53,13 @@ public class GameRunner
 		return _round;
 	}
 	
+	public bool GenerateLocations()
+	{
+		return true; // not done yet
+	}
 	
+	public GameStatus CheckGameStatus()
+	{
+		return _gameStatus;
+	}
 }

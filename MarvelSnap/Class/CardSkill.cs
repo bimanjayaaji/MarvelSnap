@@ -26,7 +26,7 @@ public class CardSkill
 		// need to be analysed more
 	}
 	
-	public bool IncreaseOthersBy2()
+	public bool SameLocIncreaseBy2()
 	{
 		return true;
 		// need to be analysed more

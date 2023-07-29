@@ -32,7 +32,7 @@ public class LocationSkill
 		// need to be analysed more
 	}	
 	
-	public bool IfOnlyOne_IncreaseBy7()
+	public bool IfOnlyOne_IncreaseBy5()
 	{
 		return true;
 		// need to be analysed more

@@ -7,5 +7,5 @@ public enum LocationType
     AfterEachTurn_IncreaseBy1,
     Closed_OnTurn4,
     Cost456_CantPlay,
-    IfOnlyOne_IncreaseBy7
+    IfOnlyOne_IncreaseBy5
 }
