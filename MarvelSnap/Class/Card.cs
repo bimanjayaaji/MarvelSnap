@@ -11,11 +11,6 @@ public abstract class Card : ICard, ICardAbility
 	protected int _attackingPower;
 	protected string? _description;
 	
-	public Card(int id, string name, CardType type, int energyCost, int attackingPower)
-	{
-		
-	}
-	
 	public int GetId()
 	{
 		return _id;
