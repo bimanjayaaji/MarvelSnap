@@ -16,6 +16,15 @@ public abstract class Card : ICard, ICardAbility
 	//bikin constructor buat init semua variabel untuk kemudian langsung dipake sama child class
 	//buat description bikin method abstract yang ngereturn string aja
 	
+	public Card(int id, string name, CardType type, int energyCost, int attackingPower)
+	{
+		_id = id;
+		_name = name;
+		_type = type;
+		_energyCost = energyCost;
+		_attackingPower = attackingPower;	
+	}
+	
 	public int GetId()
 	{
 		return _id;

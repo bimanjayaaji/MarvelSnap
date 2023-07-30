@@ -6,34 +6,55 @@ class Program
 {
 	static void Main(string[] args)
 	{
-		GameRunner gameRunner = new GameRunner();
+		PlayersId();
+		AddSpace();
+		
+		InitGame();
+		AddSpace();
+	}
+	
+	static void PlayersId() // scratching
+	{
+		GameRunner gameRunner = new();
 		
 		// ADD PLAYERS
 		
-		IPlayer player1 = new HumanPlayer();
-		player1.SetId(1);
-		player1.SetName("Dora");
-		
-		IPlayer player2 = new HumanPlayer();
-		player2.SetId(2);
-		player2.SetName("Boots");
+		IPlayer player1 = new HumanPlayer("Dora");
+		IPlayer player2 = new HumanPlayer("Boots");
 		
 		gameRunner.AddPlayer(player1);
 		gameRunner.AddPlayer(player2);
+		
+		// GET-SET NAME-ID
+		
+		// Console.WriteLine(player1.SetName("Dora")); // false. still Dora
+		// Console.WriteLine(player1.SetName("Boots")); // false. still Dora
+		// Console.WriteLine(player1.SetId(1)); // false. still 1
+		// Console.WriteLine(player1.SetId(2)); // false. still 1 
+		// Console.WriteLine(player1.SetId(3)); Console.WriteLine(player2.SetId(1)); // true, true. 1 already been deleted 
 		
 		// GET PLAYERS
 		
 		List<IPlayer> players = gameRunner.GetPlayers();
 		foreach (IPlayer p in players)
 		{
-			Console.WriteLine("Player ID : " + p.GetId());
-			Console.WriteLine("Player Name : " + p.GetName());
-			Console.WriteLine("---");
+			Console.WriteLine("ID : " + p.GetId() + " | Name : " + p.GetName());
 		}
-		
+	}
+	
+	static void InitGame() // scratching
+	{
+		GameRunner gameRunner = new();
+
 		// CHECK ROUND
 		
 		Console.WriteLine("Current Round : " + gameRunner.CheckCurrentRound());
-		Console.WriteLine("---");
+	}
+	
+	static void AddSpace()
+	{
+		Console.WriteLine("");
+		Console.WriteLine("# # # # # # # # # #");
+		Console.WriteLine("");
 	}
 }

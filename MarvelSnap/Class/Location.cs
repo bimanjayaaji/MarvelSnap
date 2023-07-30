@@ -9,6 +9,13 @@ public abstract class Location : ILocation
 	protected LocationType _type;
 	protected string? _description;
 	
+	public Location(int id, string name, LocationType type) 
+	{
+		_id = id;
+		_name = name;
+		_type = type;
+	}
+	
 	public string? GetDesc()
 	{
 		return _description;
