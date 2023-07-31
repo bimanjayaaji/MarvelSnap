@@ -9,15 +9,31 @@ public class LocationConfig
 	
 	public LocationConfig()
 	{
-		_playersScore = new Dictionary<IPlayer,int>();
-		_cardsOnBoard = new Dictionary<IPlayer,List<Card>>();
+		_playersScore = new();
+		_cardsOnBoard = new();
 		// need to be analysed more
 	}
 	
-	public bool UpdateLoc(IPlayer player, Card card)
+	public bool PlaceCard(IPlayer player, Card card)
 	{
+		_cardsOnBoard[player].Add(card);
 		return true;
 		// need to be analysed more
+		// kasih check kalo playernya ga ada
+	}
+	
+	private void ComputeScore()
+	{
+		// ngitung total score di location
+		foreach (var kvp in _cardsOnBoard)
+		{
+			int score = 0;
+			foreach(var card in kvp.Value)
+			{
+				score += card.GetAttackingPower();
+			}
+			_playersScore[kvp.Key] = score;
+		}
 	}
 	
 	public Dictionary<IPlayer,List<Card>> GetLocInfo()
@@ -31,4 +47,6 @@ public class LocationConfig
 		return _playersScore;
 		// need to be analysed more
 	}
+	
+	// GetLocWinner()
 }

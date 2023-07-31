@@ -89,9 +89,9 @@ class Program
 		// GET CARDS
 		
 		// all players-all cards
-		foreach (KeyValuePair<IPlayer, List<Card>> playerCards in gameRunner.GetCards())
+		foreach (KeyValuePair<IPlayer, List<Card>> playerCards in gameRunner.GetPlayerCards())
 		{
-			Console.WriteLine(playerCards.Key.GetName() + " :");
+			Console.WriteLine(playerCards.Key.GetName() + "'s Cards : (using GetCards() with no params)");
 			foreach (Card card in playerCards.Value)
 			{
 				Console.WriteLine(card.GetName());
@@ -100,10 +100,25 @@ class Program
 		}
 		
 		// particular player's cards
-		foreach(var x in gameRunner.GetCards(player1))
+		Console.WriteLine(player1.GetName() + "'s Cards : (using GetCards() with player param)");
+		foreach(var x in gameRunner.GetPlayerCards(player1))
 		{
 			Console.WriteLine(x.GetName());
 		}
 		Tools.SmallSpace();
+		
+		// SET LOCATIONS
+		
+		gameRunner.SetLocations();
+		
+		// GET LOCATIONS
+		
+		Console.WriteLine("Chosen Random Locations : ");
+		foreach (var location in gameRunner.GetLocations())
+		{
+			Console.WriteLine(location.GetName());	
+		}
+		Tools.SmallSpace();
+		
 	}
 }

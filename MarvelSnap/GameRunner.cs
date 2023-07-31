@@ -144,7 +144,7 @@ public class GameRunner
 		return true;
 	}
 	
-	public Dictionary<IPlayer, List<Card>> GetCards()
+	public Dictionary<IPlayer, List<Card>> GetPlayerCards()
 	{
 		Dictionary<IPlayer, List<Card>> playerCards = new();
 		
@@ -156,7 +156,7 @@ public class GameRunner
 		return playerCards;
 	}
 	
-	public List<Card>? GetCards(IPlayer player)
+	public List<Card>? GetPlayerCards(IPlayer player)
 	{
 		return _playerInfo[player].GetCardDeck();
 	}
@@ -185,7 +185,7 @@ public class GameRunner
 		return true;
 	}
 	
-	public bool SetLocations(List<Location> locList) // only 3 locs. mandatory. lol
+	public bool SetLocations(List<Location> locList)
 	{
 		foreach (var loc in locList)
 		{
@@ -200,6 +200,65 @@ public class GameRunner
 	{
 		return _locationInfo.Keys.ToList();
 	}
+	
+	public Dictionary<Location,Dictionary<IPlayer,List<Card>>> GetLocationCards()
+	{
+		Dictionary<Location,Dictionary<IPlayer,List<Card>>> locCards = new();
+		foreach (KeyValuePair<Location,LocationConfig> locInfo in _locationInfo)
+		{
+			locCards.Add(locInfo.Key, locInfo.Value.GetLocInfo());
+		}
+		
+		return locCards;
+		// add exception/warning if _locationInfo is still Empty
+		// biar ga terlalu kompleks. method GetLocInfo di LocationConfig dioverload, kasi parameter IPlayer
+		// Dictionary<IPlayer,List<Card> isa dibikin KVP
+	}
+	
+	public Dictionary<IPlayer,List<Card>> GetLocationCards(Location loc)
+	{
+		return _locationInfo[loc].GetLocInfo();
+		// add exception/warning if the loc argument doesn't exist in _locationInfo	
+	}
+	
+	public Dictionary<Location,Dictionary<IPlayer,int>> GetLocationScore()
+	{
+		Dictionary<Location,Dictionary<IPlayer,int>> locScore = new();
+		foreach (KeyValuePair<Location,LocationConfig> locInfo in _locationInfo)
+		{
+			locScore.Add(locInfo.Key, locInfo.Value.GetPlayersScore());
+		}
+		
+		return locScore;
+		// add exception/warning if _locationInfo is still Empty
+	}
+	
+	public Dictionary<IPlayer,int> GetLocationScore(Location loc)
+	{
+		return _locationInfo[loc].GetPlayersScore();
+		// add exception/warning if the loc argument doesn't exist in _locationInfo
+	}
+	
+	// GetLocationWinner()
+	// public Dictionary<Location,IPlayer> GetLocationWinner()
+	// {
+		
+	// }
+	
+	// public IPlayer GetLocationWinner(Location loc)
+	// {
+		
+	// }
+	
+	// PlayerCardOptions
+	
+	// PlayerPlaceCard
+	
+	// ExecuteCard
+	
+	// Execute Location
+	
+	// PlayerRetreat
 	
 	public bool GoNextRound()
 	{	
@@ -219,6 +278,9 @@ public class GameRunner
 				_round += 1;	
 			}
 		}
+		
+		// method buat nambah energy ke player
+		
 		return true;
 	}
 	
