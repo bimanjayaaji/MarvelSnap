@@ -81,7 +81,7 @@ public class GameRunner
 		return _allCards;
 	}
 	
-	private bool GenerateAllLocations()
+	private bool GenerateAllLocations() // called when generating new instance of GR
 	{
 		List<Location> allLocs = new()
 		{
@@ -136,6 +136,14 @@ public class GameRunner
 		return true;
 	}
 	
+	public bool SetCardsToPlayer(IPlayer player, Card card)
+	{
+		PlayerConfig playerConfig = _playerInfo[player];
+		playerConfig.AddCardDeck(card);
+		
+		return true;
+	}
+	
 	public Dictionary<IPlayer, List<Card>> GetCards()
 	{
 		Dictionary<IPlayer, List<Card>> playerCards = new();
@@ -151,6 +159,67 @@ public class GameRunner
 	public List<Card>? GetCards(IPlayer player)
 	{
 		return _playerInfo[player].GetCardDeck();
+	}
+	
+	public bool SetLocations()
+	{
+		Random random = new();
+		List<Location> randomLoc = new();
+		
+		while (randomLoc.Count < 3)
+		{
+			int num = random.Next(0, _allLocations.Count);
+				
+			if (!randomLoc.Contains(_allLocations[num]))
+			{
+				randomLoc.Add(_allLocations[num]);
+			}
+		}
+		
+		foreach (Location location in randomLoc)
+		{
+			LocationConfig config = new();
+			_locationInfo.Add(location, config);
+		}
+		
+		return true;
+	}
+	
+	public bool SetLocations(List<Location> locList) // only 3 locs. mandatory. lol
+	{
+		foreach (var loc in locList)
+		{
+			LocationConfig config = new();
+			_locationInfo.Add(loc, config);
+		}
+		
+		return true;
+	}
+	
+	public List<Location> GetLocations()
+	{
+		return _locationInfo.Keys.ToList();
+	}
+	
+	public bool GoNextRound()
+	{	
+		if (_gameStatus == GameStatus.NOT_STARTED)
+		{
+			_gameStatus = GameStatus.ONGOING;
+			_round += 1;
+		} 
+		else if (_gameStatus == GameStatus.ONGOING)
+		{
+			if (_round == 6)
+			{
+				_gameStatus = GameStatus.ENDED;	
+			} 
+			else
+			{
+				_round += 1;	
+			}
+		}
+		return true;
 	}
 	
 	public GameStatus CheckGameStatus()

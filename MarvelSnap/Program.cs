@@ -7,14 +7,14 @@ class Program
 {
 	static void Main(string[] args)
 	{
-		// Players_Test();
+		// Players_Testing();
 		// Tools.BigSpace();
 		
-		InitGame_Test();
+		InitGame_Testing();
 		Tools.BigSpace();
 	}
 	
-	static void Players_Test() // scratching
+	static void Players_Testing() // scratching
 	{
 		GameRunner gameRunner = new();
 		
@@ -43,7 +43,7 @@ class Program
 		}
 	}
 	
-	static void InitGame_Test() // scratching
+	static void InitGame_Testing()
 	{
 		GameRunner gameRunner = new();
 
@@ -99,7 +99,7 @@ class Program
 			Tools.SmallSpace();
 		}
 		
-		// one player's cards
+		// particular player's cards
 		foreach(var x in gameRunner.GetCards(player1))
 		{
 			Console.WriteLine(x.GetName());
