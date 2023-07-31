@@ -6,14 +6,14 @@ class Program
 {
 	static void Main(string[] args)
 	{
-		PlayersId();
+		Players_Test();
 		AddSpace();
 		
-		InitGame();
+		InitGame_Test();
 		AddSpace();
 	}
 	
-	static void PlayersId() // scratching
+	static void Players_Test() // scratching
 	{
 		GameRunner gameRunner = new();
 		
@@ -42,13 +42,21 @@ class Program
 		}
 	}
 	
-	static void InitGame() // scratching
+	static void InitGame_Test() // scratching
 	{
 		GameRunner gameRunner = new();
 
 		// CHECK ROUND
 		
 		Console.WriteLine("Current Round : " + gameRunner.CheckCurrentRound());
+		
+		// GET ALL CARDS
+		
+		List<Card> allCards = gameRunner.GetAllCards();
+		
+		// GET ALL LOCATIONS
+		
+		List<Location>? allLocations = gameRunner.GetAllLocations();
 	}
 	
 	static void AddSpace()

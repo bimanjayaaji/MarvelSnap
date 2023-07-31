@@ -2,7 +2,7 @@ using MarvelSnapEnum;
 using MarvelSnapInterface;
 namespace MarvelSnap;
 
-public abstract class Location : ILocation
+public class Location : ILocation
 {
 	protected int _id;
 	protected string? _name;

@@ -3,7 +3,7 @@ using MarvelSnapEnum;
 using MarvelSnapInterface;
 namespace MarvelSnap;
 
-public abstract class Card : ICard, ICardAbility
+public class Card : ICard, ICardAbility
 {
 	protected int _id;
 	protected string? _name;
