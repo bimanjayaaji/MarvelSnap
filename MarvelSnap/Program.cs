@@ -1,16 +1,17 @@
 ﻿using MarvelSnap;
 using MarvelSnapInterface;
+using MarvelSnapTools;
 namespace MainProgram;
 
 class Program
 {
 	static void Main(string[] args)
 	{
-		Players_Test();
-		AddSpace();
+		// Players_Test();
+		// Tools.BigSpace();
 		
 		InitGame_Test();
-		AddSpace();
+		Tools.BigSpace();
 	}
 	
 	static void Players_Test() // scratching
@@ -49,20 +50,60 @@ class Program
 		// CHECK ROUND
 		
 		Console.WriteLine("Current Round : " + gameRunner.CheckCurrentRound());
+		Tools.SmallSpace();
 		
 		// GET ALL CARDS
 		
 		List<Card> allCards = gameRunner.GetAllCards();
+		Console.WriteLine("All Generated Cards : ");
+		foreach (Card card in allCards)
+		{
+			Console.WriteLine(card.GetName());
+		}
+		Tools.SmallSpace();
 		
 		// GET ALL LOCATIONS
 		
 		List<Location>? allLocations = gameRunner.GetAllLocations();
-	}
-	
-	static void AddSpace()
-	{
-		Console.WriteLine("");
-		Console.WriteLine("# # # # # # # # # #");
-		Console.WriteLine("");
+		Console.WriteLine("All Generated Locations : ");
+		foreach (Location location in allLocations)
+		{
+			Console.WriteLine(location.GetName());
+		}
+		Tools.SmallSpace();
+		
+		// SET CARDS TO PLAYER
+		
+		IPlayer player1 = new HumanPlayer("Dora");
+		IPlayer player2 = new HumanPlayer("Boots");
+		gameRunner.AddPlayer(player1);
+		gameRunner.AddPlayer(player2);
+		
+		// player1-round1
+		gameRunner.SetCardsToPlayer(player1,gameRunner.CheckCurrentRound()+1);
+		// player2-round1
+		gameRunner.SetCardsToPlayer(player2,gameRunner.CheckCurrentRound()+1);
+		// player1-round2
+		gameRunner.SetCardsToPlayer(player1,gameRunner.CheckCurrentRound()+2);
+		
+		// GET CARDS
+		
+		// all players-all cards
+		foreach (KeyValuePair<IPlayer, List<Card>> playerCards in gameRunner.GetCards())
+		{
+			Console.WriteLine(playerCards.Key.GetName() + " :");
+			foreach (Card card in playerCards.Value)
+			{
+				Console.WriteLine(card.GetName());
+			}
+			Tools.SmallSpace();
+		}
+		
+		// one player's cards
+		foreach(var x in gameRunner.GetCards(player1))
+		{
+			Console.WriteLine(x.GetName());
+		}
+		Tools.SmallSpace();
 	}
 }

@@ -7,8 +7,8 @@ public class PlayerConfig
 	
 	public PlayerConfig()
 	{
+		_energyTotal = 0;
 		_cardDeck = new List<Card>(); 
-		// need to be analysed more
 	}
 	
 	public List<Card>? GetCardDeck()
@@ -18,8 +18,8 @@ public class PlayerConfig
 	
 	public bool AddCardDeck(Card card)
 	{
+		_cardDeck.Add(card);
 		return true;
-		// need to be analysed more
 	}
 	
 	public int GetEnergyTotal()
@@ -31,6 +31,5 @@ public class PlayerConfig
 	{
 		this._energyTotal = energyTotal;
 		return true;
-		// need to be analysed more
 	}
 }

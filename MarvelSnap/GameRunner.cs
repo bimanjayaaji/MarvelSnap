@@ -60,22 +60,15 @@ public class GameRunner
 	}
 	
 	private bool GenerateAllCards() // called when generating new instance of GR
-	{
-		Card quickSilver = new(1,"QuickSilver",CardType.Normal,1,2);
-		Card antMan = new(2,"AntMan",CardType.CombinedWith_3Cards_IncreaseBy3,1,1);
-		Card medusa = new(3,"Medusa",CardType.PlacedOn_Middle_IncreaseBy3,2,2);
-		Card sentinel = new(4,"Sentinel",CardType.Immortal_InDeck,2,3);
-		Card wolfsBane = new(5,"WolfsBane",CardType.SameLocIncreaseBy2,3,1);
-		Card misterFantastic = new(6,"MisterFantastic",CardType.IncreaseAdjacentBy2,3,2);
-		
+	{		
 		List<Card> allCards = new()
 		{
-			quickSilver,
-			antMan,
-			medusa,
-			sentinel,
-			wolfsBane,
-			misterFantastic
+			new (1,"QuickSilver",CardType.Normal,1,2),
+			new (2,"AntMan",CardType.CombinedWith_3Cards_IncreaseBy3,1,1),
+			new (3,"Medusa",CardType.PlacedOn_Middle_IncreaseBy3,2,2),
+			new (4,"Sentinel",CardType.Immortal_InDeck,2,3),
+			new (5,"WolfsBane",CardType.SameLocIncreaseBy2,3,1),
+			new (6,"MisterFantastic",CardType.IncreaseAdjacentBy2,3,2)
 		};
 		
 		_allCards = allCards;
@@ -90,21 +83,14 @@ public class GameRunner
 	
 	private bool GenerateAllLocations()
 	{
-		Location ruins = new(1,"Ruins",LocationType.Normal);
-		Location nidavellir = new(2,"Nidavellir", LocationType.CardsHere_IncreaseBy5);
-		Location muirIsland = new(3,"Muir Island",LocationType.AfterEachTurn_IncreaseBy1);
-		Location kyln = new(4,"Kyln",LocationType.Closed_OnTurn4);
-		Location theBigHouse = new(5,"The Big House",LocationType.Cost456_CantPlay);
-		Location atlantis = new(6,"Atlantis",LocationType.IfOnlyOne_IncreaseBy5);
-		
 		List<Location> allLocs = new()
 		{
-			ruins,
-			nidavellir,
-			muirIsland,
-			kyln,
-			theBigHouse,
-			atlantis
+			new(1,"Ruins",LocationType.Normal),
+			new(2,"Nidavellir", LocationType.CardsHere_IncreaseBy5),
+			new(3,"Muir Island",LocationType.AfterEachTurn_IncreaseBy1),
+			new(4,"Kyln",LocationType.Closed_OnTurn4),
+			new(5,"The Big House",LocationType.Cost456_CantPlay),
+			new(6,"Atlantis",LocationType.IfOnlyOne_IncreaseBy5)
 		};
 		
 		_allLocations = allLocs;
@@ -115,6 +101,56 @@ public class GameRunner
 	public List<Location>? GetAllLocations()
 	{
 		return _allLocations;
+	}
+	
+	public bool SetCardsToPlayer(IPlayer player, int round)
+	{
+		PlayerConfig playerConfig = _playerInfo[player];
+		Random random = new();
+		List<int> randomList = new();
+
+		if (round == 1) // when round 1, assign 4 lower cards
+		{
+			while (randomList.Count < 4)
+			{
+				int num = random.Next(0, 6);
+				// should be (0,_allCards.Count), but set to 5 considering initial energyCost
+				 
+				if (!randomList.Contains(num))
+				{
+					randomList.Add(num);
+				}
+			}
+		} 
+		else // other than round 1, assign 1 card
+		{
+			int num = random.Next(0, _allCards.Count);
+			randomList.Add(num);	
+		}	
+		
+		foreach (var ind in randomList)
+		{
+			playerConfig.AddCardDeck(_allCards[ind]);	
+		}
+		
+		return true;
+	}
+	
+	public Dictionary<IPlayer, List<Card>> GetCards()
+	{
+		Dictionary<IPlayer, List<Card>> playerCards = new();
+		
+		foreach (KeyValuePair<IPlayer, PlayerConfig> player in _playerInfo)
+		{
+			playerCards.Add(player.Key, player.Value.GetCardDeck());
+		}
+		
+		return playerCards;
+	}
+	
+	public List<Card>? GetCards(IPlayer player)
+	{
+		return _playerInfo[player].GetCardDeck();
 	}
 	
 	public GameStatus CheckGameStatus()
