@@ -4,19 +4,19 @@ namespace MarvelSnap;
 
 public class LocationConfig
 {
-	private Dictionary<IPlayer,int> _playersScore;
-	private Dictionary<IPlayer,List<Card>> _cardsOnBoard;
+	private Dictionary<IPlayer,int> _LocScore;
+	private Dictionary<IPlayer,List<Card>> _cardsOnLoc;
 	
 	public LocationConfig()
 	{
-		_playersScore = new();
-		_cardsOnBoard = new();
+		_LocScore = new();
+		_cardsOnLoc = new();
 		// need to be analysed more
 	}
 	
 	public bool PlaceCard(IPlayer player, Card card)
 	{
-		_cardsOnBoard[player].Add(card);
+		_cardsOnLoc[player].Add(card);
 		return true;
 		// need to be analysed more
 		// kasih check kalo playernya ga ada
@@ -24,29 +24,39 @@ public class LocationConfig
 	
 	private void ComputeScore()
 	{
-		// ngitung total score di location
-		foreach (var kvp in _cardsOnBoard)
+		foreach (var kvp in _cardsOnLoc)
 		{
 			int score = 0;
 			foreach(var card in kvp.Value)
 			{
 				score += card.GetAttackingPower();
 			}
-			_playersScore[kvp.Key] = score;
+			_LocScore[kvp.Key] = score;
 		}
 	}
 	
 	public Dictionary<IPlayer,List<Card>> GetLocInfo()
 	{
-		return _cardsOnBoard;
-		// need to be analysed more
+		return _cardsOnLoc;
 	}
 	
-	public Dictionary<IPlayer,int> GetPlayersScore()
+	public Dictionary<IPlayer,int> GetLocScore()
 	{
-		return _playersScore;
-		// need to be analysed more
+		ComputeScore();
+		return _LocScore;
 	}
 	
-	// GetLocWinner()
+	public IPlayer GetLocWinner()
+	{
+		int highest = 0;
+		IPlayer winner = null;
+		foreach (var kvp in _LocScore)
+		{
+			if (kvp.Value > highest)
+			{
+				winner = kvp.Key;
+			}
+		}
+		return winner;
+	}
 }

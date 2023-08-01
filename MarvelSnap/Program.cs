@@ -1,4 +1,6 @@
-﻿using MarvelSnap;
+﻿using System.Runtime.Intrinsics.Arm;
+using MarvelSnap;
+using MarvelSnapEnum;
 using MarvelSnapInterface;
 using MarvelSnapTools;
 namespace MainProgram;
@@ -10,7 +12,10 @@ class Program
 		// Players_Testing();
 		// Tools.BigSpace();
 		
-		InitGame_Testing();
+		// InitGame_Testing();
+		// Tools.BigSpace();
+		
+		GamePlay_Testing();
 		Tools.BigSpace();
 	}
 	
@@ -21,10 +26,10 @@ class Program
 		// ADD PLAYERS
 		
 		IPlayer player1 = new HumanPlayer("Dora");
-		IPlayer player2 = new HumanPlayer("Boots");
+		IPlayer player2 = new HumanPlayer("Dora");
 		
-		gameRunner.AddPlayer(player1);
-		gameRunner.AddPlayer(player2);
+		Console.WriteLine(gameRunner.AddPlayer(player1));
+		Console.WriteLine(gameRunner.AddPlayer(player2));
 		
 		// GET-SET NAME-ID
 		
@@ -120,5 +125,55 @@ class Program
 		}
 		Tools.SmallSpace();
 		
+		
+		
+	}
+
+	static void GamePlay_Testing()
+	{
+		// DECLARATION
+		GameRunner gameRunner = new();
+		List<Location> locations = new();
+		
+		// INTRO
+		Console.WriteLine("--- WELCOME TO MARVELSNAP! ---"); 
+		Tools.SmallSpace();
+		
+		// ENTER PLAYER'S IDENTITY
+		Console.Write("Input first player's name : ");
+		IPlayer player1 = new HumanPlayer("Dora");
+		gameRunner.AddPlayer(player1);
+		Console.Write("Input second player's name : ");
+		IPlayer player2 = new HumanPlayer("Boots");
+		gameRunner.AddPlayer(player2);
+		Console.WriteLine($"Welcome {player1.GetName()} and {player2.GetName()}");
+		Tools.SmallSpace();
+		
+		// INITIALIZING - Locations
+		gameRunner.SetLocations();
+		locations = gameRunner.GetLocations();
+		Tools.Println("We will play in these locations :");
+		foreach (Location loc in locations)
+		{
+			Tools.Println("- " + loc.GetName());
+		}
+		Tools.SmallSpace();
+		
+		// START ROUND
+		Tools.Println("Let's Play!");
+		Tools.SmallSpace();
+		gameRunner.GoNextRound();
+		while (gameRunner.CheckGameStatus() == GameStatus.ONGOING)
+		{
+			// Set Cards to Player
+			gameRunner.SetCardsToPlayer(player1,gameRunner.CheckCurrentRound());
+			gameRunner.SetCardsToPlayer(player2,gameRunner.CheckCurrentRound());
+			
+			// Display Locations
+			List<Location> revealLoc = gameRunner.RevealLocation();
+			
+			// Go Next Round
+			gameRunner.GoNextRound();
+		}
 	}
 }

@@ -13,4 +13,15 @@ public class Tools
 		Console.WriteLine("# # # # # # # # # #");
 		Console.WriteLine("");
 	}
+	
+	public static void Print(string x)
+	{
+		Console.Write(x);
+	}
+	
+	public static void Println(string x)
+	{
+		Console.WriteLine(x);
+	}
+	
 }

@@ -23,7 +23,7 @@ public class GameRunner
 		GenerateAllLocations();
 	}
 	
-	public bool? AddPlayer(IPlayer player)
+	public bool AddPlayer(IPlayer player)
 	{
 		if (_playerInfo.Count < 2)
 		{
@@ -226,33 +226,80 @@ public class GameRunner
 		Dictionary<Location,Dictionary<IPlayer,int>> locScore = new();
 		foreach (KeyValuePair<Location,LocationConfig> locInfo in _locationInfo)
 		{
-			locScore.Add(locInfo.Key, locInfo.Value.GetPlayersScore());
+			locScore.Add(locInfo.Key, locInfo.Value.GetLocScore());
 		}
 		
 		return locScore;
 		// add exception/warning if _locationInfo is still Empty
-	}
+		// TINGGAL MANGGIL GETLOCATIONSCORE(...) TO NJAY! ^-^
+ 	}
 	
 	public Dictionary<IPlayer,int> GetLocationScore(Location loc)
 	{
-		return _locationInfo[loc].GetPlayersScore();
+		return _locationInfo[loc].GetLocScore();
 		// add exception/warning if the loc argument doesn't exist in _locationInfo
 	}
 	
-	// GetLocationWinner()
-	// public Dictionary<Location,IPlayer> GetLocationWinner()
-	// {
+	public Dictionary<Location,IPlayer> GetLocationWinner()
+	{
+		Dictionary<Location,IPlayer> winners = new();
+		foreach (Location loc in _locationInfo.Keys)
+		{
+			winners.Add(loc,GetLocationWinner(loc));
+		}		
+		return winners;
+	}
+	
+	public IPlayer GetLocationWinner(Location loc)
+	{
+		return _locationInfo[loc].GetLocWinner();	
+	}
+	
+	public List<Card> PlayerCardOptions(IPlayer player)
+	{
+		List<Card> options = new();
+		PlayerConfig config = _playerInfo[player];
+		int energy = config.GetEnergyTotal();
 		
-	// }
+		foreach (Card card in config.GetCardDeck())
+		{
+			if (card.GetEnergyCost() <= energy)
+			{
+				options.Add(card);
+			}
+		}
+		return options;
+	}
 	
-	// public IPlayer GetLocationWinner(Location loc)
-	// {
+	public bool PlayerPlaceCard(IPlayer player, Card card, Location loc)
+	{
+		LocationConfig config = _locationInfo[loc];
+		config.PlaceCard(player, card);
+		return true;
+	}
+	
+	// RevealLocation -- in the scope of GR or Program? GR --> tells Program which Loc to be revealed
+	public virtual List<Location> RevealLocation()
+	{
+		List<Location> revealLoc = new();
+		int num = 0;
 		
-	// }
+		foreach (Location loc in _locationInfo.Keys)
+		{
+			if (num < CheckCurrentRound())
+			{
+				revealLoc.Add(loc);
+				num += 1;
+			} 
+			else
+			{
+				break;	
+			}
+		}
+		return revealLoc;
+	}
 	
-	// PlayerCardOptions
-	
-	// PlayerPlaceCard
+	// RevealCards -- in the scope of GR or Program? --> tells Program which Loc to be revealed
 	
 	// ExecuteCard
 	
@@ -279,7 +326,10 @@ public class GameRunner
 			}
 		}
 		
-		// method buat nambah energy ke player
+		foreach (PlayerConfig config in _playerInfo.Values)
+		{
+			config.SetEnergyTotal(_round);
+		}
 		
 		return true;
 	}

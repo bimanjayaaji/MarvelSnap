@@ -3,7 +3,7 @@ namespace MarvelSnap;
 public class PlayerConfig
 {
 	private int _energyTotal;
-	private List<Card>? _cardDeck;
+	private List<Card> _cardDeck;
 	
 	public PlayerConfig()
 	{
@@ -11,7 +11,7 @@ public class PlayerConfig
 		_cardDeck = new List<Card>(); 
 	}
 	
-	public List<Card>? GetCardDeck()
+	public List<Card> GetCardDeck()
 	{
 		return _cardDeck;
 	}
