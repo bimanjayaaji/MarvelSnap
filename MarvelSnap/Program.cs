@@ -165,19 +165,19 @@ class Program
 			GameDisplay1_Testing(gameRunner);
 			Console.Clear();
 			
-			// Player1 place card
-			GameDisplay1_Testing(gameRunner); Tools.BigSpace();
-			GameDisplay2_Testing(gameRunner, player1); Tools.BigSpace();
-			Tools.Println(player1.GetName());
-			Tools.Print("Insert Card's index to place Card : ");
-			// takes card's index argument
-			Tools.Print("Insert Location's index to place Card : ");
-			// takes location's index argument
-			
-			Console.Clear();
-			
-			
-			
+			// Players place card
+			foreach (IPlayer player in gameRunner.GetPlayers())
+			{
+				GameDisplay1_Testing(gameRunner); Tools.BigSpace();
+				GameDisplay2_Testing(gameRunner, player); Tools.BigSpace();
+				Tools.Println(player.GetName());
+				Tools.Print("Insert Card's index to place Card : ");
+				int cardIndex = 0; _ = int.TryParse(Tools.Readln(), out cardIndex); 
+				Tools.Print("Insert Location's index to place Card : ");
+				int locIndex = 0; _ = int.TryParse(Tools.Readln(), out locIndex);
+				gameRunner.PlayerPlaceCard(player,cardIndex,locIndex); 	
+				Console.Clear();
+			}
 			
 			// Go Next Round
 			gameRunner.GoNextRound();
@@ -197,11 +197,12 @@ class Program
 				Tools.Println($"	Location {revealLoc.IndexOf(loc)+1} : {loc.GetName()}"); 
 				foreach (var player in gameRunner.GetLocationCards(loc))
 				{
-					Tools.Println($"		{player.Key.GetName()}'s Cards : ");
+					Tools.Print($"		{player.Key.GetName()}'s Cards : ");
 					foreach (var card in player.Value)
 					{
 						Tools.Print($"{card.GetName()},");
 					}
+					Tools.SmallSpace();
 				}				
 			}
 			else
@@ -230,22 +231,5 @@ class Program
 			Tools.Println($"|  {playerCards.IndexOf(card)}  | {card.GetName()}/{card.GetEnergyCost()}/{card.GetAttackingPower()}");
 		}
 		Tools.SmallSpace();
-	}
-	
-	static void GameDisplay3_Testing(GameRunner gameRunner)
-	{
-		Dictionary<IPlayer,List<Card>> playerCards = gameRunner.GetPlayerCards();
-		
-		foreach (var player in playerCards)
-		{
-			Tools.Println($"{player.Key.GetName()} ==> Energy : {gameRunner.GetPlayerEnergy(player.Key)}");
-			Tools.Println("Cards :");
-			Tools.Println("| idx | NAME / COST / ATTACK)");
-			foreach (var card in player.Value)
-			{
-				Tools.Println($"|  {player.Value.IndexOf(card)}  | {card.GetName()}/{card.GetEnergyCost()}/{card.GetAttackingPower()}");
-			}
-			Tools.SmallSpace();
-		}
 	}
 }

@@ -24,4 +24,9 @@ public class Tools
 		Console.WriteLine(x);
 	}
 	
+	public static string? Readln()
+	{
+		string? passed = Console.ReadLine();
+		return passed;
+	}
 }

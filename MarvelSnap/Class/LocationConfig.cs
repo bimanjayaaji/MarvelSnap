@@ -28,6 +28,7 @@ public class LocationConfig
 	public bool PlaceCard(IPlayer player, Card card)
 	{
 		_cardsOnLoc[player].Add(card);
+		// KURANGIN KARTU DARI PLAYER
 		return true;
 		// kasih check kalo playernya ga ada
 	}

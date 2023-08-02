@@ -293,6 +293,28 @@ public class GameRunner
 		LocationConfig config = _locationInfo[loc];
 		config.PlaceCard(player, card);
 		return true;
+		// KURANGIN KARTU DARI PLAYER
+	}
+
+	public bool PlayerPlaceCard(IPlayer player, int cardIndex, int locIndex)
+	{
+		Card desiredCard = GetPlayerCards(player)[cardIndex];
+		Location? desiredLoc = null;
+		int counter = 1;
+		foreach (Location loc in _locationInfo.Keys)
+		{
+			if (locIndex == counter)
+			{
+				desiredLoc = loc;
+				break;
+			}
+			counter++;
+		}
+		LocationConfig config = _locationInfo[desiredLoc];
+		
+		config.PlaceCard(player, desiredCard);
+		return true;
+		// KURANGIN KARTU DARI PLAYER
 	}
 
 	public virtual List<Location> RevealLocation()
