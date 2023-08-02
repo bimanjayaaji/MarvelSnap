@@ -16,7 +16,6 @@ class Program
 		// Tools.BigSpace();
 		
 		GamePlay_Testing();
-		Tools.BigSpace();
 	}
 	
 	static void Players_Testing() // scratching
@@ -151,29 +150,102 @@ class Program
 		
 		// INITIALIZING - Locations
 		gameRunner.SetLocations();
-		locations = gameRunner.GetLocations();
-		Tools.Println("We will play in these locations :");
-		foreach (Location loc in locations)
-		{
-			Tools.Println("- " + loc.GetName());
-		}
-		Tools.SmallSpace();
 		
 		// START ROUND
 		Tools.Println("Let's Play!");
-		Tools.SmallSpace();
+		Tools.BigSpace();
 		gameRunner.GoNextRound();
 		while (gameRunner.CheckGameStatus() == GameStatus.ONGOING)
 		{
-			// Set Cards to Player
+			// Set Cards to Player for each round
 			gameRunner.SetCardsToPlayer(player1,gameRunner.CheckCurrentRound());
 			gameRunner.SetCardsToPlayer(player2,gameRunner.CheckCurrentRound());
 			
-			// Display Locations
-			List<Location> revealLoc = gameRunner.RevealLocation();
+			// Display Locations and Players's cards
+			GameDisplay1_Testing(gameRunner);
+			Console.Clear();
+			
+			// Player1 place card
+			GameDisplay1_Testing(gameRunner); Tools.BigSpace();
+			GameDisplay2_Testing(gameRunner, player1); Tools.BigSpace();
+			Tools.Println(player1.GetName());
+			Tools.Print("Insert Card's index to place Card : ");
+			// takes card's index argument
+			Tools.Print("Insert Location's index to place Card : ");
+			// takes location's index argument
+			
+			Console.Clear();
+			
+			
+			
 			
 			// Go Next Round
 			gameRunner.GoNextRound();
+		}
+	}
+	
+	static void GameDisplay1_Testing(GameRunner gameRunner)
+	{
+		List<Location> revealLoc = gameRunner.RevealLocation();
+		
+		// Printing
+		Console.WriteLine($"Round {gameRunner.CheckCurrentRound()}");
+		foreach (Location loc in gameRunner.GetLocations())
+		{
+			if (revealLoc.Contains(loc))
+			{
+				Tools.Println($"	Location {revealLoc.IndexOf(loc)+1} : {loc.GetName()}"); 
+				foreach (var player in gameRunner.GetLocationCards(loc))
+				{
+					Tools.Println($"		{player.Key.GetName()}'s Cards : ");
+					foreach (var card in player.Value)
+					{
+						Tools.Print($"{card.GetName()},");
+					}
+				}				
+			}
+			else
+			{
+				Tools.Println($"	Location {revealLoc.IndexOf(loc)+1} :");
+				foreach (var player in gameRunner.GetLocationCards(loc))
+				{
+					Tools.Println($"		{player.Key.GetName()}'s Cards : ");
+					foreach (var card in player.Value)
+					{
+						Tools.Print($"{card.GetName()},");
+					}	
+				}
+			}
+		}
+	}
+	
+	static void GameDisplay2_Testing(GameRunner gameRunner, IPlayer player)
+	{
+		List<Card> playerCards = gameRunner.GetPlayerCards(player);
+		Tools.Println($"{player.GetName()} ==> Energy : {gameRunner.GetPlayerEnergy(player)}");
+		Tools.Println("Cards :");
+		Tools.Println("| idx | NAME / COST / ATTACK)");
+		foreach (var card in playerCards)
+		{
+			Tools.Println($"|  {playerCards.IndexOf(card)}  | {card.GetName()}/{card.GetEnergyCost()}/{card.GetAttackingPower()}");
+		}
+		Tools.SmallSpace();
+	}
+	
+	static void GameDisplay3_Testing(GameRunner gameRunner)
+	{
+		Dictionary<IPlayer,List<Card>> playerCards = gameRunner.GetPlayerCards();
+		
+		foreach (var player in playerCards)
+		{
+			Tools.Println($"{player.Key.GetName()} ==> Energy : {gameRunner.GetPlayerEnergy(player.Key)}");
+			Tools.Println("Cards :");
+			Tools.Println("| idx | NAME / COST / ATTACK)");
+			foreach (var card in player.Value)
+			{
+				Tools.Println($"|  {player.Value.IndexOf(card)}  | {card.GetName()}/{card.GetEnergyCost()}/{card.GetAttackingPower()}");
+			}
+			Tools.SmallSpace();
 		}
 	}
 }

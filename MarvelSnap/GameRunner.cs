@@ -156,9 +156,26 @@ public class GameRunner
 		return playerCards;
 	}
 	
-	public List<Card>? GetPlayerCards(IPlayer player)
+	public List<Card> GetPlayerCards(IPlayer player)
 	{
 		return _playerInfo[player].GetCardDeck();
+	}
+	
+	public Dictionary<IPlayer,int> GetPlayerEnergy()
+	{
+		Dictionary<IPlayer,int> energy = new();
+		
+		foreach (var player in _playerInfo)
+		{
+			energy.Add(player.Key,player.Value.GetEnergyTotal());
+		}
+		
+		return energy;
+	}
+	
+	public int GetPlayerEnergy(IPlayer player)
+	{
+		return _playerInfo[player].GetEnergyTotal();
 	}
 	
 	public bool SetLocations()
@@ -179,6 +196,7 @@ public class GameRunner
 		foreach (Location location in randomLoc)
 		{
 			LocationConfig config = new();
+			config.InitLocPlayer(GetPlayers());
 			_locationInfo.Add(location, config);
 		}
 		
@@ -192,7 +210,6 @@ public class GameRunner
 			LocationConfig config = new();
 			_locationInfo.Add(loc, config);
 		}
-		
 		return true;
 	}
 	
@@ -277,8 +294,7 @@ public class GameRunner
 		config.PlaceCard(player, card);
 		return true;
 	}
-	
-	// RevealLocation -- in the scope of GR or Program? GR --> tells Program which Loc to be revealed
+
 	public virtual List<Location> RevealLocation()
 	{
 		List<Location> revealLoc = new();
