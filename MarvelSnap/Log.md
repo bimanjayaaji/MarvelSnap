@@ -12,7 +12,11 @@
 - [x] Construct Display-Locations relations between GR and Program in GamePlay_Testing() (Assigned : 230801. Done : 230802 )
 - [x] Construct Reveal Cards (Assigned : 230801. Done : 230802 )
 - [ ] Construct Execute Cards, Execute Locations in GR (Assigned : 230801. Done : _ )
-- [ ] **!!!! EVALUATE PLAYER'S ENERGY WHEN CHOOSING CARD !!!!** (Assigned : 230802. Done : _ )
-- [ ] **!!!! ILANGIN CARD YANG UDAH DIPAKE DARI DECK !!!!** (Assigned : 230802. Done : _ )
+- [x] **!!!! EVALUATE PLAYER'S ENERGY WHEN CHOOSING CARD !!!!** (Assigned : 230802. Done : 230803 )
+- [x] **!!! NARUH LEBIH DARI SATU KARTU !!!** (Assigned : 230803. Done : _ )
+- [ ] Every loc, every player, max 4 cards
+- [x] **!!!! ILANGIN CARD YANG UDAH DIPAKE DARI DECK !!!!** (Assigned : 230802. Done : _ )
+- [ ] **! TIMER !**
+- [ ] exception handling
 - [ ] Modify Display-Locations algoritm in Program to display "2" and "3" in 2nd and 3rd locations in the 1st and 2nd round (Assigned : 230802. Done : _ )
 - [ ] Handle exception when player insert invalid character when choosing card index and location index (Assigned : 230802. Done : _ )

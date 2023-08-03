@@ -257,6 +257,29 @@ public class GameRunner
 		// add exception/warning if the loc argument doesn't exist in _locationInfo
 	}
 	
+	public int GetLocationScore(Location loc, IPlayer player)
+	{
+		return _locationInfo[loc].GetLocScore()[player];
+	}
+	
+	public Dictionary<IPlayer,int> GetLocationScore(int locIndex)
+	{
+		Location? desiredLoc = null;
+		int counter = 1;
+		foreach (Location loc in _locationInfo.Keys)
+		{
+			if (locIndex == counter)
+			{
+				desiredLoc = loc;
+				break;
+			}
+			counter++;
+		}
+		LocationConfig config = _locationInfo[desiredLoc];
+		
+		return config.GetLocScore();
+	}
+	
 	public Dictionary<Location,IPlayer> GetLocationWinner()
 	{
 		Dictionary<Location,IPlayer> winners = new();
@@ -292,13 +315,19 @@ public class GameRunner
 	{
 		LocationConfig config = _locationInfo[loc];
 		config.PlaceCard(player, card);
+		
+		_playerInfo[player].RemoveCard(card);
+		
+		int energy = _playerInfo[player].GetEnergyTotal();
+		_playerInfo[player].SetEnergyTotal(energy - card.GetEnergyCost());
 		return true;
-		// KURANGIN KARTU DARI PLAYER
+		// KURANGIN KARTU DARI PLAYER VV
+		// KURANGIN ENERGY DARI PLAYER
 	}
 
 	public bool PlayerPlaceCard(IPlayer player, int cardIndex, int locIndex)
 	{
-		Card desiredCard = GetPlayerCards(player)[cardIndex];
+		Card desiredCard = GetPlayerCards(player)[cardIndex-1];
 		Location? desiredLoc = null;
 		int counter = 1;
 		foreach (Location loc in _locationInfo.Keys)
@@ -313,8 +342,20 @@ public class GameRunner
 		LocationConfig config = _locationInfo[desiredLoc];
 		
 		config.PlaceCard(player, desiredCard);
+		
+		_playerInfo[player].RemoveCard(desiredCard);
+		
+		int energy = _playerInfo[player].GetEnergyTotal();
+		_playerInfo[player].SetEnergyTotal(energy - desiredCard.GetEnergyCost());
+		
 		return true;
-		// KURANGIN KARTU DARI PLAYER
+		// KURANGIN KARTU DARI PLAYER VV
+		// KURANGIN ENERGY DARI PLAYER
+	}
+
+	public bool CheckCardValid(IPlayer player,int cardIndex)
+	{
+		return PlayerCardOptions(player).Contains(GetPlayerCards(player)[cardIndex-1]);
 	}
 
 	public virtual List<Location> RevealLocation()
@@ -337,13 +378,36 @@ public class GameRunner
 		return revealLoc;
 	}
 	
-	// RevealCards -- in the scope of GR or Program? --> tells Program which Loc to be revealed
-	
 	// ExecuteCard
 	
 	// Execute Location
 	
 	// PlayerRetreat
+	
+	public IPlayer DetermineWinner()
+	{	
+		foreach (var kvp in GetLocationWinner())
+		{
+			foreach (IPlayer player in GetPlayers())
+			{
+				if (kvp.Value == player)
+				{
+					_playerInfo[player].AddFinalScore();
+				}
+			}
+		}
+		
+		List<int> playersScore = new();
+
+		if (_playerInfo[GetPlayers()[0]].GetFinalScore() > _playerInfo[GetPlayers()[0]].GetFinalScore())
+		{
+			return GetPlayers()[0];
+		}
+		else
+		{
+			return GetPlayers()[1];
+		}
+	}
 	
 	public bool GoNextRound()
 	{	

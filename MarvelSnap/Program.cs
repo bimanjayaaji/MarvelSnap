@@ -168,20 +168,66 @@ class Program
 			// Players place card
 			foreach (IPlayer player in gameRunner.GetPlayers())
 			{
-				GameDisplay1_Testing(gameRunner); Tools.BigSpace();
-				GameDisplay2_Testing(gameRunner, player); Tools.BigSpace();
-				Tools.Println(player.GetName());
-				Tools.Print("Insert Card's index to place Card : ");
-				int cardIndex = 0; _ = int.TryParse(Tools.Readln(), out cardIndex); 
-				Tools.Print("Insert Location's index to place Card : ");
-				int locIndex = 0; _ = int.TryParse(Tools.Readln(), out locIndex);
-				gameRunner.PlayerPlaceCard(player,cardIndex,locIndex); 	
-				Console.Clear();
+				bool placeAgain = true;
+				while (placeAgain)
+				{
+					GameDisplay1_Testing(gameRunner); Tools.BigSpace();
+					GameDisplay2_Testing(gameRunner, player); Tools.BigSpace();
+
+					Tools.Println(player.GetName());
+
+					bool cardValid = false;
+					bool endTurn = false;
+					while (!cardValid)
+					{
+						Tools.Print("Insert Card's index to place Card : ");
+						int cardIndex = 0;
+						_ = int.TryParse(Tools.Readln(), out cardIndex);
+						if (cardIndex == 0)
+						{
+							endTurn = true;
+							break;
+						}
+						
+						if (gameRunner.CheckCardValid(player, cardIndex))
+						{
+							Tools.Print("Insert Location's index to place Card : ");
+							int locIndex = 0; _ = int.TryParse(Tools.Readln(), out locIndex);
+							gameRunner.PlayerPlaceCard(player, cardIndex, locIndex);
+							cardValid = true;
+						}
+						else
+						{
+							Tools.Println("Energy not enough! (Insert 0 to end the turn) "); 
+						}
+					}
+					if (endTurn)
+					{
+						Console.Clear();
+						break;
+					}
+					
+					Console.Clear();
+					GameDisplay1_Testing(gameRunner); Tools.BigSpace();
+					GameDisplay2_Testing(gameRunner, player); Tools.BigSpace();
+					
+					Tools.Print("Place Again? (y/n)");
+					string? again = Tools.Readln();
+					if (again == "n")
+					{
+						placeAgain = false;
+					}
+					
+					Console.Clear();
+				} 
 			}
 			
 			// Go Next Round
 			gameRunner.GoNextRound();
 		}
+		
+		//determine winner
+		GameDisplay3_Testing(gameRunner);
 	}
 	
 	static void GameDisplay1_Testing(GameRunner gameRunner)
@@ -197,11 +243,12 @@ class Program
 				Tools.Println($"	Location {revealLoc.IndexOf(loc)+1} : {loc.GetName()}"); 
 				foreach (var player in gameRunner.GetLocationCards(loc))
 				{
-					Tools.Print($"		{player.Key.GetName()}'s Cards : ");
+					Tools.Print($"		({gameRunner.GetLocationScore(loc,player.Key)}) {player.Key.GetName()}'s Cards : ");
 					foreach (var card in player.Value)
 					{
 						Tools.Print($"{card.GetName()},");
 					}
+					
 					Tools.SmallSpace();
 				}				
 			}
@@ -210,11 +257,13 @@ class Program
 				Tools.Println($"	Location {revealLoc.IndexOf(loc)+1} :");
 				foreach (var player in gameRunner.GetLocationCards(loc))
 				{
-					Tools.Println($"		{player.Key.GetName()}'s Cards : ");
+					Tools.Print($"		({gameRunner.GetLocationScore(loc,player.Key)}) {player.Key.GetName()}'s Cards : ");
 					foreach (var card in player.Value)
 					{
 						Tools.Print($"{card.GetName()},");
-					}	
+					}
+					
+					Tools.SmallSpace();	
 				}
 			}
 		}
@@ -228,8 +277,23 @@ class Program
 		Tools.Println("| idx | NAME / COST / ATTACK)");
 		foreach (var card in playerCards)
 		{
-			Tools.Println($"|  {playerCards.IndexOf(card)}  | {card.GetName()}/{card.GetEnergyCost()}/{card.GetAttackingPower()}");
+			Tools.Println($"|  {playerCards.IndexOf(card)+1}  | {card.GetName()}/{card.GetEnergyCost()}/{card.GetAttackingPower()}");
 		}
 		Tools.SmallSpace();
+	}
+
+	static void GameDisplay3_Testing(GameRunner gameRunner)
+	{
+		Console.Clear();
+		Tools.Println("----- GAME'S DONE -----");
+		Tools.Println($"Winner : {gameRunner.DetermineWinner().GetName()}");
+		Tools.BigSpace();
+		
+		foreach (var kvp in gameRunner.GetLocationWinner())
+		{
+			Tools.Print($"Location : {kvp.Key.GetName()} 		---> Winner : {kvp.Value.GetName()} ");	
+			Tools.Println($"({gameRunner.GetLocationScore(kvp.Key,gameRunner.GetPlayers()[0])} / {gameRunner.GetLocationScore(kvp.Key,gameRunner.GetPlayers()[1])})");
+		}
+		Console.ReadKey();
 	}
 }
