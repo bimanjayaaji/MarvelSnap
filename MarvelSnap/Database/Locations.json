@@ -1,0 +1,38 @@
+[
+  {
+    "_description": "Nothing",
+    "_id": 1,
+    "_name": "Ruins",
+    "_type": 1
+  },
+  {
+    "_description": "Cards here have +5 Power",
+    "_id": 2,
+    "_name": "Nidavellir",
+    "_type": 2
+  },
+  {
+    "_description": "After each turn, give cards here +1 Power",
+    "_id": 3,
+    "_name": "Muir Island",
+    "_type": 3
+  },
+  {
+    "_description": "You can't play cards here after turn 4",
+    "_id": 4,
+    "_name": "Kyln",
+    "_type": 4
+  },
+  {
+    "_description": "Cards that cost 4, 5, or 6 can't be played here",
+    "_id": 5,
+    "_name": "The Big House",
+    "_type": 5
+  },
+  {
+    "_description": "If you only have one card here, it has +5 Power",
+    "_id": 6,
+    "_name": "Atlantis",
+    "_type": 6
+  }
+]

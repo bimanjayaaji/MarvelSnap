@@ -1,26 +1,24 @@
-using System.Security.Authentication.ExtendedProtection;
 using MarvelSnapEnum;
 using MarvelSnapInterface;
+using System.Runtime.Serialization;
 namespace MarvelSnap;
 
-public class Card : ICard, ICardAbility
+[DataContract] public class Card : ICard, ICardAbility
 {
-	protected int _id;
-	protected string? _name;
-	protected CardType _type;
-	protected int _energyCost;
-	protected int _attackingPower;
-	protected string? _description;
-	
-	//TODO
-	//bikin constructor buat init semua variabel untuk kemudian langsung dipake sama child class
-	//buat description bikin method abstract yang ngereturn string aja
-	
-	public Card(int id, string name, CardType type, int energyCost, int attackingPower)
+	[DataMember] private int _id;
+	[DataMember] private string? _name;
+	[DataMember] private CardType _type;
+	[DataMember] private CardApplyType _applyType;
+	[DataMember] private int _energyCost;
+	[DataMember] private int _attackingPower;
+	[DataMember] private string? _description;
+
+	public Card(int id, string name, CardType type, CardApplyType applyType, int energyCost, int attackingPower)
 	{
 		_id = id;
 		_name = name;
 		_type = type;
+		_applyType = applyType;
 		_energyCost = energyCost;
 		_attackingPower = attackingPower;	
 	}
@@ -38,6 +36,11 @@ public class Card : ICard, ICardAbility
 	CardType ICardAbility.GetType()
 	{
 		return _type;
+	}
+	
+	CardApplyType ICardAbility.GetApplyType()
+	{
+		return _applyType;
 	}
 	
 	public string? GetDesc()

@@ -1,5 +1,4 @@
-﻿using System.Runtime.Intrinsics.Arm;
-using MarvelSnap;
+﻿using MarvelSnap;
 using MarvelSnapEnum;
 using MarvelSnapInterface;
 using MarvelSnapTools;
@@ -16,9 +15,13 @@ class Program
 		// Tools.BigSpace();
 		
 		GamePlay_Testing();
+		
+		// Serialization.Serialization.SerializeCards();
+		// Serialization.Serialization.Deserialize();
+		// Serialization.Serialization.SerializeLocs();
 	}
 	
-	static void Players_Testing() // scratching
+	static void Players_Testing()
 	{
 		GameRunner gameRunner = new();
 		
@@ -162,7 +165,7 @@ class Program
 			gameRunner.SetCardsToPlayer(player2,gameRunner.CheckCurrentRound());
 			
 			// Display Locations and Players's cards
-			GameDisplay1_Testing(gameRunner);
+			// GameDisplay1_Testing(gameRunner);
 			Console.Clear();
 			
 			// Players place card
@@ -180,9 +183,16 @@ class Program
 					bool endTurn = false;
 					while (!cardValid)
 					{
-						Tools.Print("Insert Card's index to place Card : ");
+						Tools.Print("Insert Card's index to place Card (0 to pass turn): ");
 						int cardIndex = 0;
-						_ = int.TryParse(Tools.Readln(), out cardIndex);
+						bool marker = int.TryParse(Tools.Readln(), out cardIndex);
+						while(!marker || cardIndex > gameRunner.GetPlayerCards(player).Count)
+						{
+							Tools.Println("Invalid");
+							Tools.Print("Insert Card's index to place Card (0 to pass turn): ");
+							marker = int.TryParse(Tools.Readln(), out cardIndex);
+						};
+						
 						if (cardIndex == 0)
 						{
 							endTurn = true;
@@ -192,15 +202,24 @@ class Program
 						if (gameRunner.CheckCardValid(player, cardIndex))
 						{
 							Tools.Print("Insert Location's index to place Card : ");
-							int locIndex = 0; _ = int.TryParse(Tools.Readln(), out locIndex);
+							int locIndex = 0; 
+							bool marker1 = int.TryParse(Tools.Readln(), out locIndex);
+							while(!marker1 || locIndex > gameRunner.GetLocations().Count ||
+									locIndex < 1)
+							{
+								Tools.Println("Invalid");
+								Tools.Print("Insert Location's index to place Card : ");
+								marker1 = int.TryParse(Tools.Readln(), out locIndex);
+							};
 							gameRunner.PlayerPlaceCard(player, cardIndex, locIndex);
 							cardValid = true;
 						}
 						else
 						{
-							Tools.Println("Energy not enough! (Insert 0 to end the turn) "); 
+							Tools.Println("Energy not enough!"); 
 						}
 					}
+					
 					if (endTurn)
 					{
 						Console.Clear();
@@ -212,17 +231,34 @@ class Program
 					GameDisplay2_Testing(gameRunner, player); Tools.BigSpace();
 					
 					Tools.Print("Place Again? (y/n)");
-					string? again = Tools.Readln();
-					if (again == "n")
+					string? again = null;
+					bool valid = false;
+					do
 					{
-						placeAgain = false;
+						again = Tools.Readln();
+						if (again == "n")
+						{
+							placeAgain = false;
+							break;
+						}
+						else if (again == "y")
+						{
+							break;
+						}
+						else
+						{
+							Tools.Println("Invalid");
+						}
 					}
+					while(!valid);
 					
 					Console.Clear();
 				} 
 			}
 			
 			// Go Next Round
+			// gameRunner.ApplyOnRevealCards(); // !!! on progress
+			// gameRunner.ApplyOnGoingCards(); // !!! on progress
 			gameRunner.GoNextRound();
 		}
 		
@@ -230,17 +266,18 @@ class Program
 		GameDisplay3_Testing(gameRunner);
 	}
 	
-	static void GameDisplay1_Testing(GameRunner gameRunner)
+	static void GameDisplay1_Testing(GameRunner gameRunner) //board
 	{
 		List<Location> revealLoc = gameRunner.RevealLocation();
 		
 		// Printing
-		Console.WriteLine($"Round {gameRunner.CheckCurrentRound()}");
+		Tools.Println($"Round {gameRunner.CheckCurrentRound()}");
+		Tools.SmallSpace();
 		foreach (Location loc in gameRunner.GetLocations())
 		{
 			if (revealLoc.Contains(loc))
 			{
-				Tools.Println($"	Location {revealLoc.IndexOf(loc)+1} : {loc.GetName()}"); 
+				Tools.Println($"	Location {revealLoc.IndexOf(loc)+1} : {loc.GetName()}. {loc.GetDesc()}"); 
 				foreach (var player in gameRunner.GetLocationCards(loc))
 				{
 					Tools.Print($"		({gameRunner.GetLocationScore(loc,player.Key)}) {player.Key.GetName()}'s Cards : ");
@@ -248,9 +285,9 @@ class Program
 					{
 						Tools.Print($"{card.GetName()},");
 					}
-					
 					Tools.SmallSpace();
-				}				
+				}
+				Tools.SmallSpace();				
 			}
 			else
 			{
@@ -265,24 +302,24 @@ class Program
 					
 					Tools.SmallSpace();	
 				}
+				Tools.SmallSpace();
 			}
 		}
 	}
 	
-	static void GameDisplay2_Testing(GameRunner gameRunner, IPlayer player)
+	static void GameDisplay2_Testing(GameRunner gameRunner, IPlayer player) //player's deck
 	{
 		List<Card> playerCards = gameRunner.GetPlayerCards(player);
 		Tools.Println($"{player.GetName()} ==> Energy : {gameRunner.GetPlayerEnergy(player)}");
 		Tools.Println("Cards :");
-		Tools.Println("| idx | NAME / COST / ATTACK)");
+		Tools.Println("| idx | NAME / COST / ATTACK / DESCRIPTION");
 		foreach (var card in playerCards)
 		{
-			Tools.Println($"|  {playerCards.IndexOf(card)+1}  | {card.GetName()}/{card.GetEnergyCost()}/{card.GetAttackingPower()}");
+			Tools.Println($"|  {playerCards.IndexOf(card)+1}  | {card.GetName()} / {card.GetEnergyCost()} / {card.GetAttackingPower()} / {card.GetDesc()}");
 		}
-		Tools.SmallSpace();
 	}
 
-	static void GameDisplay3_Testing(GameRunner gameRunner)
+	static void GameDisplay3_Testing(GameRunner gameRunner) //winner
 	{
 		Console.Clear();
 		Tools.Println("----- GAME'S DONE -----");

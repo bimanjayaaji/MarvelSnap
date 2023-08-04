@@ -1,0 +1,56 @@
+[
+  {
+    "_attackingPower": 2,
+    "_description": "Starts in your opening hand",
+    "_energyCost": 1,
+    "_id": 1,
+    "_name": "QuickSilver",
+    "_type": 1,
+    "_applyType": 0
+  },
+  {
+    "_attackingPower": 1,
+    "_description": "Ongoing: If you have 3 other cards here, +3 power",
+    "_energyCost": 1,
+    "_id": 2,
+    "_name": "AntMan",
+    "_type": 2,
+    "_applyType": 2
+  },
+  {
+    "_attackingPower": 2,
+    "_description": "OnReveal: If this is at the middle location, +3 power",
+    "_energyCost": 2,
+    "_id": 3,
+    "_name": "Medusa",
+    "_type": 3,
+    "_applyType": 1
+  },
+  {
+    "_attackingPower": 3,
+    "_description": "OnReveal: Add another Sentinel to your hand",
+    "_energyCost": 2,
+    "_id": 4,
+    "_name": "Sentinel",
+    "_type": 4,
+    "_applyType": 1
+  },
+  {
+    "_attackingPower": 1,
+    "_description": "OnReveal: +2 Power for each other card you have here",
+    "_energyCost": 3,
+    "_id": 5,
+    "_name": "WolfsBane",
+    "_type": 5,
+    "_applyType": 1
+  },
+  {
+    "_attackingPower": 2,
+    "_description": "OnGoing: Adjacent locations have +2 Power",
+    "_energyCost": 3,
+    "_id": 6,
+    "_name": "MisterFantastic",
+    "_type": 6,
+    "_applyType": 2
+  }
+]

@@ -4,6 +4,7 @@ namespace MarvelSnapInterface;
 public interface ICardAbility
 {
 	CardType GetType();
+	CardApplyType GetApplyType();
 	string? GetDesc();
 	int GetEnergyCost();
 	int GetAttackingPower();

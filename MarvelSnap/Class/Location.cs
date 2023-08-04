@@ -1,13 +1,14 @@
 using MarvelSnapEnum;
 using MarvelSnapInterface;
+using System.Runtime.Serialization; // added
 namespace MarvelSnap;
 
-public class Location : ILocation
+[DataContract] public class Location : ILocation
 {
-	protected int _id;
-	protected string? _name;
-	protected LocationType _type;
-	protected string? _description;
+	[DataMember] private int _id;
+	[DataMember] private string? _name;
+	[DataMember] private LocationType _type;
+	[DataMember] private string? _description;
 	
 	public Location(int id, string name, LocationType type) 
 	{

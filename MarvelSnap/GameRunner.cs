@@ -1,6 +1,7 @@
 using  MarvelSnapInterface;
 using MarvelSnapEnum;
 namespace MarvelSnap;
+using System.Runtime.Serialization.Json;
 
 public class GameRunner
 {
@@ -61,17 +62,9 @@ public class GameRunner
 	
 	private bool GenerateAllCards() // called when generating new instance of GR
 	{		
-		List<Card> allCards = new()
-		{
-			new (1,"QuickSilver",CardType.Normal,1,2),
-			new (2,"AntMan",CardType.CombinedWith_3Cards_IncreaseBy3,1,1),
-			new (3,"Medusa",CardType.PlacedOn_Middle_IncreaseBy3,2,2),
-			new (4,"Sentinel",CardType.Immortal_InDeck,2,3),
-			new (5,"WolfsBane",CardType.SameLocIncreaseBy2,3,1),
-			new (6,"MisterFantastic",CardType.IncreaseAdjacentBy2,3,2)
-		};
-		
-		_allCards = allCards;
+		var ser = new DataContractJsonSerializer(typeof(List<Card>));
+		FileStream stream = new FileStream("Database\\Cards.json", FileMode.OpenOrCreate);
+		_allCards = (List<Card>)ser?.ReadObject(stream);
 		
 		return true;
 	}
@@ -83,18 +76,9 @@ public class GameRunner
 	
 	private bool GenerateAllLocations() // called when generating new instance of GR
 	{
-		List<Location> allLocs = new()
-		{
-			new(1,"Ruins",LocationType.Normal),
-			new(2,"Nidavellir", LocationType.CardsHere_IncreaseBy5),
-			new(3,"Muir Island",LocationType.AfterEachTurn_IncreaseBy1),
-			new(4,"Kyln",LocationType.Closed_OnTurn4),
-			new(5,"The Big House",LocationType.Cost456_CantPlay),
-			new(6,"Atlantis",LocationType.IfOnlyOne_IncreaseBy5)
-		};
-		
-		_allLocations = allLocs;
-		
+		var ser = new DataContractJsonSerializer(typeof(List<Location>));
+		FileStream stream = new FileStream("Database\\Locations.json", FileMode.OpenOrCreate);
+		_allLocations = (List<Location>)ser?.ReadObject(stream);
 		return true;
 	}
 	
@@ -325,6 +309,21 @@ public class GameRunner
 		// KURANGIN ENERGY DARI PLAYER
 	}
 
+	public Location LocFromIndex(int locIndex)
+	{
+		Location? desiredLoc = null;
+		int counter = 1;
+		foreach (Location loc in _locationInfo.Keys)
+		{
+			if (locIndex == counter)
+			{
+				desiredLoc = loc;
+			}
+			counter++;
+		}
+		return desiredLoc;
+	}
+
 	public bool PlayerPlaceCard(IPlayer player, int cardIndex, int locIndex)
 	{
 		Card desiredCard = GetPlayerCards(player)[cardIndex-1];
@@ -378,11 +377,29 @@ public class GameRunner
 		return revealLoc;
 	}
 	
-	// ExecuteCard
+	public bool ApplyOnRevealCards()
+	{
+		throw new NotImplementedException();
+	}
+	
+	public bool ApplyOnGoingCards()
+	{
+		throw new NotImplementedException();
+	}
+	
+	// Execute Card
+	public bool ExecuteCard()
+	{
+		throw new NotImplementedException();
+	}
 	
 	// Execute Location
+	public bool ExecuteLoc()
+	{
+		throw new NotImplementedException();
+	}
 	
-	// PlayerRetreat
+	// Player Retreat
 	
 	public IPlayer DetermineWinner()
 	{	

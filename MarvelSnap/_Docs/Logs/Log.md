@@ -14,9 +14,18 @@
 - [ ] Construct Execute Cards, Execute Locations in GR (Assigned : 230801. Done : _ )
 - [x] **!!!! EVALUATE PLAYER'S ENERGY WHEN CHOOSING CARD !!!!** (Assigned : 230802. Done : 230803 )
 - [x] **!!! NARUH LEBIH DARI SATU KARTU !!!** (Assigned : 230803. Done : _ )
-- [ ] Every loc, every player, max 4 cards
+- [ ] Every loc, every player, max 4 cards (Assigned : 230802. Done : _ )
 - [x] **!!!! ILANGIN CARD YANG UDAH DIPAKE DARI DECK !!!!** (Assigned : 230802. Done : _ )
-- [ ] **! TIMER !**
-- [ ] exception handling
+- [ ] **! TIMER !** --> *Development* (Assigned : 230803. Done : _ )
 - [ ] Modify Display-Locations algoritm in Program to display "2" and "3" in 2nd and 3rd locations in the 1st and 2nd round (Assigned : 230802. Done : _ )
-- [ ] Handle exception when player insert invalid character when choosing card index and location index (Assigned : 230802. Done : _ )
+
+## BUGS
+- [ ] Winnernya Boots teros --> Di determine winner (Assigned : 230803. Done : _ )
+ ![Alt text](../Pictures/image.png)
+ ![Alt text](../Pictures/image2.png)
+ ![Alt text](image.png)
+- [ ] Exception Handler:
+  - [ ] Handle exception when player insert invalid character when choosing card index and location index (Assigned : 230802. Done : _ )
+  - [ ] (User Input) Null input (Assigned : 230804. Done : _ )
+  - [ ] (User Input) Not numeric input (Assigned : 230804. Done : _ )
+  - [ ] Kalo location null, method determine winner bakal exception: Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object. (Assigned : 230804. Done : _ )
