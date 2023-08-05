@@ -1,6 +1,8 @@
 using MarvelSnapEnum;
 using MarvelSnapInterface;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+
 namespace MarvelSnap;
 
 [DataContract] public class Card : ICard, ICardAbility
@@ -12,6 +14,7 @@ namespace MarvelSnap;
 	[DataMember] private int _energyCost;
 	[DataMember] private int _attackingPower;
 	[DataMember] private string? _description;
+	private bool _placed;
 
 	public Card(int id, string name, CardType type, CardApplyType applyType, int energyCost, int attackingPower)
 	{
@@ -20,7 +23,9 @@ namespace MarvelSnap;
 		_type = type;
 		_applyType = applyType;
 		_energyCost = energyCost;
-		_attackingPower = attackingPower;	
+		_attackingPower = attackingPower;
+		_placed = false;
+		//_description = description;	
 	}
 	
 	public int GetId()
@@ -33,12 +38,12 @@ namespace MarvelSnap;
 		return _name;
 	}
 	
-	CardType ICardAbility.GetType()
+	public CardType GetSkill()
 	{
 		return _type;
 	}
 	
-	CardApplyType ICardAbility.GetApplyType()
+	public CardApplyType GetApplyType()
 	{
 		return _applyType;
 	}
@@ -65,6 +70,18 @@ namespace MarvelSnap;
 
 	public bool SetAttackingPower(int power)
 	{
-		throw new NotImplementedException();
+		_attackingPower = power;
+		return true;
 	}	
+	
+	public bool IsPlaced()
+	{
+		return _placed;
+	}
+	
+	public bool SetIsPlaced(bool state)
+	{
+		_placed = state;
+		return true;
+	}
 }

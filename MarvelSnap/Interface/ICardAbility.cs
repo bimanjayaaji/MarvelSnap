@@ -3,7 +3,7 @@ namespace MarvelSnapInterface;
 
 public interface ICardAbility
 {
-	CardType GetType();
+	CardType GetSkill();
 	CardApplyType GetApplyType();
 	string? GetDesc();
 	int GetEnergyCost();

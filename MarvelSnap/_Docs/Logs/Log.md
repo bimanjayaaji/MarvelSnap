@@ -21,11 +21,20 @@
 
 ## BUGS
 - [ ] Winnernya Boots teros --> Di determine winner (Assigned : 230803. Done : _ )
- ![Alt text](../Pictures/image.png)
- ![Alt text](../Pictures/image2.png)
- ![Alt text](image.png)
+ ![Alt text](../Pictures/bug1.0.png)
+ ![Alt text](../Pictures/bug1.1.png)
+ ![Alt text](../Pictures/bug1.2.pn)
 - [ ] Exception Handler:
-  - [ ] Handle exception when player insert invalid character when choosing card index and location index (Assigned : 230802. Done : _ )
-  - [ ] (User Input) Null input (Assigned : 230804. Done : _ )
-  - [ ] (User Input) Not numeric input (Assigned : 230804. Done : _ )
+  - [x] Handle exception when player insert invalid character when choosing card index and location index (Assigned : 230802. Done : _ )
+  - [x] (User Input) Null input (Assigned : 230804. Done : _ )
+  - [x] (User Input) Not numeric input (Assigned : 230804. Done : _ )
   - [ ] Kalo location null, method determine winner bakal exception: Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object. (Assigned : 230804. Done : _ )
+
+## MarvelSnap-DAY! (23-08-05)
+1. Major
+   - [ ] card skill
+   - [ ] location skill
+2. Minor
+   - [ ] display location 1 and 2 in the early round
+   - [ ] pas player nempatin kartu di board, ga langsung munculin skor tapi nunggu semua player masukin kartu ke board. jadi di akhir round baru nampilin skor
+   - [ ] bug di winner

@@ -1,7 +1,9 @@
 using  MarvelSnapInterface;
 using MarvelSnapEnum;
-namespace MarvelSnap;
 using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
+namespace MarvelSnap;
+
 
 public class GameRunner
 {
@@ -114,7 +116,9 @@ public class GameRunner
 		
 		foreach (var ind in randomList)
 		{
-			playerConfig.AddCardDeck(_allCards[ind]);	
+			Card chosenCard = JsonConvert.DeserializeObject<Card>(JsonConvert.SerializeObject(_allCards[ind]));
+			playerConfig.AddCardDeck(chosenCard);	
+			// playerConfig.AddCardDeck(_allCards[ind]);	
 		}
 		
 		return true;
@@ -123,7 +127,8 @@ public class GameRunner
 	public bool SetCardsToPlayer(IPlayer player, Card card)
 	{
 		PlayerConfig playerConfig = _playerInfo[player];
-		playerConfig.AddCardDeck(card);
+		Card chosenCard = JsonConvert.DeserializeObject<Card>(JsonConvert.SerializeObject(card));
+		playerConfig.AddCardDeck(chosenCard);
 		
 		return true;
 	}
@@ -300,13 +305,11 @@ public class GameRunner
 		LocationConfig config = _locationInfo[loc];
 		config.PlaceCard(player, card);
 		
-		_playerInfo[player].RemoveCard(card);
+		_playerInfo[player].RemoveCard(card); // removing the placed card from player's deck. set card's isplaced to true
 		
 		int energy = _playerInfo[player].GetEnergyTotal();
-		_playerInfo[player].SetEnergyTotal(energy - card.GetEnergyCost());
+		_playerInfo[player].SetEnergyTotal(energy - card.GetEnergyCost()); // reducing player's energy
 		return true;
-		// KURANGIN KARTU DARI PLAYER VV
-		// KURANGIN ENERGY DARI PLAYER
 	}
 
 	public Location LocFromIndex(int locIndex)
@@ -338,18 +341,11 @@ public class GameRunner
 			}
 			counter++;
 		}
-		LocationConfig config = _locationInfo[desiredLoc];
 		
-		config.PlaceCard(player, desiredCard);
+		ApplyOnRevealCards(player, desiredCard, desiredLoc, locIndex);
 		
-		_playerInfo[player].RemoveCard(desiredCard);
-		
-		int energy = _playerInfo[player].GetEnergyTotal();
-		_playerInfo[player].SetEnergyTotal(energy - desiredCard.GetEnergyCost());
-		
+		PlayerPlaceCard(player, desiredCard, desiredLoc);
 		return true;
-		// KURANGIN KARTU DARI PLAYER VV
-		// KURANGIN ENERGY DARI PLAYER
 	}
 
 	public bool CheckCardValid(IPlayer player,int cardIndex)
@@ -377,27 +373,45 @@ public class GameRunner
 		return revealLoc;
 	}
 	
-	public bool ApplyOnRevealCards()
+	public bool ApplyOnRevealCards(IPlayer player, Card card, Location loc, int locIndex)
 	{
-		throw new NotImplementedException();
+		if (card.GetApplyType() == CardApplyType.OnReveal)
+		{
+			switch (card.GetSkill())
+			{
+				case CardType.Normal:
+					return true;
+
+				case CardType.PlacedOn_Middle_IncreaseBy3: // SEMUA KARTU DENGAN TIPE YANG SAMA KENA EFEK JUGA
+					if (locIndex == 2)
+					{
+						card.SetAttackingPower(card.GetAttackingPower() + 3);
+					}
+					return true;
+
+				case CardType.Immortal_InDeck:
+					SetCardsToPlayer(player, card);
+					return true;
+
+				case CardType.SameLocIncreaseBy2:
+					List<Card> playerCards = _locationInfo[loc].GetLocInfo()[player];
+					if (playerCards.Count > 0)
+					{
+						foreach (Card singleCard in playerCards)
+						{
+							singleCard.SetAttackingPower(singleCard.GetAttackingPower() + 2);
+						}
+					}
+					return true;
+			}
+		}
+		return false;
 	}
 	
-	public bool ApplyOnGoingCards()
-	{
-		throw new NotImplementedException();
-	}
-	
-	// Execute Card
-	public bool ExecuteCard()
-	{
-		throw new NotImplementedException();
-	}
-	
-	// Execute Location
-	public bool ExecuteLoc()
-	{
-		throw new NotImplementedException();
-	}
+	// public bool ApplyOnGoingCards()
+	// {
+	// 	throw new NotImplementedException();
+	// }
 	
 	// Player Retreat
 	
