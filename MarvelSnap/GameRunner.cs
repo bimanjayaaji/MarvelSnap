@@ -340,6 +340,11 @@ public class GameRunner
 
 	public bool CheckLocFull(int locIndex, IPlayer player)
 	{
+		if (locIndex < 1 || locIndex > GetLocations().Count)
+		{
+			return false;
+		}
+		
 		if (_locationInfo[LocFromIndex(locIndex)].GetLocInfo()[player].Count > 3)
 		{
 			return false;
@@ -364,10 +369,13 @@ public class GameRunner
 			}
 			counter++;
 		}
-		ApplyOnRevealCards(player, desiredCard, desiredLoc, locIndex);
+		
 		PlayerPlaceCard(player, desiredCard, desiredLoc);
+		ApplyOnRevealCards(player, desiredCard, desiredLoc, locIndex);
 		ApplyOnGoingCards();
+		
 		desiredCard.SetIsPlayed(true);
+		
 		return true;
 	}
 
@@ -408,7 +416,8 @@ public class GameRunner
 				case CardType.PlacedOn_Middle_IncreaseBy3:
 					if (locIndex == 2)
 					{
-						card.SetAttackingPower(card.GetAttackingPower() + 3);
+						// card.SetAttackingPower(card.GetAttackingPower() + 3);
+						_locationInfo[loc].AddScore(player,3);
 					}
 					return true;
 
@@ -418,7 +427,7 @@ public class GameRunner
 
 				case CardType.SameLocIncreaseBy2:
 					List<Card> playerCards = _locationInfo[loc].GetLocInfo()[player];
-					_locationInfo[loc].AddScore(player, playerCards.Count * 2);
+					_locationInfo[loc].AddScore(player, (playerCards.Count-1) * 2); // mines 1!
 					return true;
 				
 				case CardType.IncreaseAdjacentBy2:
@@ -445,49 +454,18 @@ public class GameRunner
 			{
 				foreach (Card card in GetPlayerCardsOnLoc(loc, player))
 				{
-					Console.WriteLine($"Entering iteration of {player.GetName()} card {card.GetName()}");
 					if (card.GetApplyType() == CardApplyType.OnGoing)
 					{
-						Console.WriteLine("Entering if (card.GetApplyType() == CardApplyType.OnGoing)");
-						Console.ReadKey();
 						if (!card.IsPerformed()) // logic for ongoing cards here and beyond
 						{
-							Console.WriteLine("Entering if (!card.IsPerformed())");
-							Console.ReadKey();
 							if (card.GetSkill() == CardType.CombinedWith_3Cards_IncreaseBy3)
 							{
-								Console.WriteLine("Entering if (card.GetSkill() == CardType.CombinedWith_3Cards_IncreaseBy3)");
-								Console.WriteLine($"Card isplayed : {card.IsPlayed()}");
-								Console.ReadKey();
 								List<Card> playerCards = _locationInfo[loc].GetLocInfo()[player];
-								if (!card.IsPlayed())
-								{
-									Console.WriteLine("Entering if (!card.IsPlayed())");
-									Console.WriteLine($"players card count : {playerCards.Count}");
-									Console.ReadKey();
-									if(playerCards.Count == 4)
+								if(playerCards.Count == 4)
 									{
-										Console.WriteLine("Entering if(playerCards.Count == 4)");
-										Console.ReadKey();
-										// card.SetAttackingPower(card.GetAttackingPower() + 3);
 										_locationInfo[loc].AddScore(player, 3);
 										card.SetIsPerformed(true);
 									}
-								}
-								else
-								{
-									Console.WriteLine("Entering if (!card.IsPlayed()) else side");
-									Console.WriteLine($"players card count : {playerCards.Count}");
-									Console.ReadKey();
-									if(playerCards.Count == 4)
-									{
-										Console.WriteLine("Entering if(playerCards.Count == 4)");
-										Console.ReadKey();
-										// card.SetAttackingPower(card.GetAttackingPower() + 3);
-										_locationInfo[loc].AddScore(player, 3);
-										card.SetIsPerformed(true);
-									}
-								}
 							}
 						}
 					}
