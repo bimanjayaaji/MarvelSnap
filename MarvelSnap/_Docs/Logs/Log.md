@@ -32,9 +32,11 @@
 
 ## MarvelSnap-DAY! (23-08-05)
 1. Major
-   - [ ] card skill
+   - [x] onreveal card skill
+   - [ ] ongoing card skill
    - [ ] location skill
 2. Minor
    - [ ] display location 1 and 2 in the early round
    - [ ] pas player nempatin kartu di board, ga langsung munculin skor tapi nunggu semua player masukin kartu ke board. jadi di akhir round baru nampilin skor
-   - [ ] bug di winner
+   - [ ] bug di winner, salah nentuin winner
+   - [ ] bug di winner, kalo ada loc yg kosong malah exception
