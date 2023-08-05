@@ -15,6 +15,7 @@ namespace MarvelSnap;
 	[DataMember] private int _attackingPower;
 	[DataMember] private string? _description;
 	private bool _placed;
+	private bool _performed;
 
 	public Card(int id, string name, CardType type, CardApplyType applyType, int energyCost, int attackingPower)
 	{
@@ -25,6 +26,7 @@ namespace MarvelSnap;
 		_energyCost = energyCost;
 		_attackingPower = attackingPower;
 		_placed = false;
+		_performed = false;
 		//_description = description;	
 	}
 	
@@ -74,14 +76,25 @@ namespace MarvelSnap;
 		return true;
 	}	
 	
-	public bool IsPlaced()
+	public bool IsPlayed()
 	{
 		return _placed;
 	}
 	
-	public bool SetIsPlaced(bool state)
+	public bool SetIsPlayed(bool state)
 	{
 		_placed = state;
+		return true;
+	}
+	
+	public bool IsPerformed()
+	{
+		return _performed;
+	}
+	
+	public bool SetIsPerformed(bool state)
+	{
+		_performed = state;
 		return true;
 	}
 }

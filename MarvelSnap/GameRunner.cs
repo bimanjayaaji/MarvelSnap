@@ -65,7 +65,7 @@ public class GameRunner
 	private bool GenerateAllCards() // called when generating new instance of GR
 	{		
 		var ser = new DataContractJsonSerializer(typeof(List<Card>));
-		FileStream stream = new FileStream("Database\\Cards.json", FileMode.OpenOrCreate);
+		FileStream stream = new FileStream(@"D:\Learner\000 Work\230609 Formulatrix Bootcamp\MarvelSnap\MarvelSnap\MarvelSnap\Database\Cards.json", FileMode.OpenOrCreate);
 		_allCards = (List<Card>)ser?.ReadObject(stream);
 		
 		return true;
@@ -79,7 +79,7 @@ public class GameRunner
 	private bool GenerateAllLocations() // called when generating new instance of GR
 	{
 		var ser = new DataContractJsonSerializer(typeof(List<Location>));
-		FileStream stream = new FileStream("Database\\Locations.json", FileMode.OpenOrCreate);
+		FileStream stream = new FileStream(@"D:\Learner\000 Work\230609 Formulatrix Bootcamp\MarvelSnap\MarvelSnap\MarvelSnap\Database\Locations.json", FileMode.OpenOrCreate);
 		_allLocations = (List<Location>)ser?.ReadObject(stream);
 		return true;
 	}
@@ -227,6 +227,11 @@ public class GameRunner
 		// add exception/warning if the loc argument doesn't exist in _locationInfo	
 	}
 	
+	public List<Card> GetPlayerCardsOnLoc(Location loc, IPlayer player)
+	{
+		return _locationInfo[loc].GetPlayerCardsOnLoc(player);
+	}
+	
 	public Dictionary<Location,Dictionary<IPlayer,int>> GetLocationScore()
 	{
 		Dictionary<Location,Dictionary<IPlayer,int>> locScore = new();
@@ -306,7 +311,11 @@ public class GameRunner
 		config.PlaceCard(player, card);
 		
 		_playerInfo[player].RemoveCard(card); // removing the placed card from player's deck. set card's isplaced to true
-		card.SetIsPlaced(true);
+		if (card.GetApplyType() != CardApplyType.OnGoing)
+		{
+			card.SetIsPerformed(true);
+		}
+		// card.SetIsPlayed(true);	
 		
 		int energy = _playerInfo[player].GetEnergyTotal();
 		_playerInfo[player].SetEnergyTotal(energy - card.GetEnergyCost()); // reducing player's energy
@@ -356,8 +365,9 @@ public class GameRunner
 			counter++;
 		}
 		ApplyOnRevealCards(player, desiredCard, desiredLoc, locIndex);
-
 		PlayerPlaceCard(player, desiredCard, desiredLoc);
+		ApplyOnGoingCards();
+		desiredCard.SetIsPlayed(true);
 		return true;
 	}
 
@@ -409,13 +419,6 @@ public class GameRunner
 				case CardType.SameLocIncreaseBy2:
 					List<Card> playerCards = _locationInfo[loc].GetLocInfo()[player];
 					_locationInfo[loc].AddScore(player, playerCards.Count * 2);
-					// if (playerCards.Count > 0)
-					// {
-					// 	foreach (Card singleCard in playerCards)
-					// 	{
-					// 		singleCard.SetAttackingPower(singleCard.GetAttackingPower() + 2);
-					// 	}
-					// }
 					return true;
 				
 				case CardType.IncreaseAdjacentBy2:
@@ -434,12 +437,65 @@ public class GameRunner
 		return false;
 	}
 	
-	// public bool ApplyOnGoingCards(IPlayer player, Card card, Location loc, int locIndex)
-	// {
-		
-	// }
-	
-	// Player Retreat
+	public bool ApplyOnGoingCards()
+	{
+		foreach (Location loc in GetLocations())
+		{
+			foreach (IPlayer player in GetPlayers())
+			{
+				foreach (Card card in GetPlayerCardsOnLoc(loc, player))
+				{
+					Console.WriteLine($"Entering iteration of {player.GetName()} card {card.GetName()}");
+					if (card.GetApplyType() == CardApplyType.OnGoing)
+					{
+						Console.WriteLine("Entering if (card.GetApplyType() == CardApplyType.OnGoing)");
+						Console.ReadKey();
+						if (!card.IsPerformed()) // logic for ongoing cards here and beyond
+						{
+							Console.WriteLine("Entering if (!card.IsPerformed())");
+							Console.ReadKey();
+							if (card.GetSkill() == CardType.CombinedWith_3Cards_IncreaseBy3)
+							{
+								Console.WriteLine("Entering if (card.GetSkill() == CardType.CombinedWith_3Cards_IncreaseBy3)");
+								Console.WriteLine($"Card isplayed : {card.IsPlayed()}");
+								Console.ReadKey();
+								List<Card> playerCards = _locationInfo[loc].GetLocInfo()[player];
+								if (!card.IsPlayed())
+								{
+									Console.WriteLine("Entering if (!card.IsPlayed())");
+									Console.WriteLine($"players card count : {playerCards.Count}");
+									Console.ReadKey();
+									if(playerCards.Count == 4)
+									{
+										Console.WriteLine("Entering if(playerCards.Count == 4)");
+										Console.ReadKey();
+										// card.SetAttackingPower(card.GetAttackingPower() + 3);
+										_locationInfo[loc].AddScore(player, 3);
+										card.SetIsPerformed(true);
+									}
+								}
+								else
+								{
+									Console.WriteLine("Entering if (!card.IsPlayed()) else side");
+									Console.WriteLine($"players card count : {playerCards.Count}");
+									Console.ReadKey();
+									if(playerCards.Count == 4)
+									{
+										Console.WriteLine("Entering if(playerCards.Count == 4)");
+										Console.ReadKey();
+										// card.SetAttackingPower(card.GetAttackingPower() + 3);
+										_locationInfo[loc].AddScore(player, 3);
+										card.SetIsPerformed(true);
+									}
+								}
+							}
+						}
+					}
+				}
+			}			
+		}
+		return true;
+	}
 	
 	public Dictionary<IPlayer,int> GetTotalScore()
 	{

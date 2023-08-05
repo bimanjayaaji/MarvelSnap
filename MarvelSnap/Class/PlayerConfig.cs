@@ -26,7 +26,7 @@ public class PlayerConfig
 	
 	public bool RemoveCard(Card card)
 	{
-		card.SetIsPlaced(true);
+		// card.SetIsPlayed(true);
 		_cardDeck.Remove(card);
 		return true;
 	}

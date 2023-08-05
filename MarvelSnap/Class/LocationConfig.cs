@@ -70,6 +70,11 @@ public class LocationConfig
 		return _cardsOnLoc;
 	}
 	
+	public List<Card> GetPlayerCardsOnLoc(IPlayer player)
+	{
+		return _cardsOnLoc[player];
+	}
+	
 	public Dictionary<IPlayer,int> GetLocScore()
 	{
 		// ComputeScore();
