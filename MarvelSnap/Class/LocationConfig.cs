@@ -28,9 +28,28 @@ public class LocationConfig
 	public bool PlaceCard(IPlayer player, Card card)
 	{
 		_cardsOnLoc[player].Add(card);
+		ComputeScore(player,card);
 		// KURANGIN KARTU DARI PLAYER
 		return true;
 		// kasih check kalo playernya ga ada
+	}
+	
+	public bool AddScore(IPlayer player, int add)
+	{
+		_locScore[player] += add;
+		return true;
+	}
+	
+	public bool SetScore(IPlayer player, int score)
+	{
+		_locScore[player] = score;
+		return true;
+	}
+	
+	private bool ComputeScore(IPlayer player, Card card)
+	{
+		_locScore[player] += card.GetAttackingPower();
+		return true;
 	}
 	
 	private void ComputeScore()
@@ -53,7 +72,7 @@ public class LocationConfig
 	
 	public Dictionary<IPlayer,int> GetLocScore()
 	{
-		ComputeScore();
+		// ComputeScore();
 		return _locScore;
 	}
 	

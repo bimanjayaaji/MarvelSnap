@@ -35,6 +35,7 @@
    - [x] onreveal card skill
    - [ ] ongoing card skill
    - [ ] location skill
+   - [ ] 4 max cards on each location
 2. Minor
    - [ ] display location 1 and 2 in the early round
    - [ ] pas player nempatin kartu di board, ga langsung munculin skor tapi nunggu semua player masukin kartu ke board. jadi di akhir round baru nampilin skor

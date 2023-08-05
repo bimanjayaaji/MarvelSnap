@@ -46,11 +46,11 @@
   },
   {
     "_attackingPower": 2,
-    "_description": "OnGoing: Adjacent locations have +2 Power",
+    "_description": "OnReveal: Adjacent locations have +2 Power",
     "_energyCost": 3,
     "_id": 6,
     "_name": "MisterFantastic",
     "_type": 6,
-    "_applyType": 3
+    "_applyType": 2
   }
 ]

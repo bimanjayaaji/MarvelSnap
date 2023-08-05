@@ -306,6 +306,7 @@ public class GameRunner
 		config.PlaceCard(player, card);
 		
 		_playerInfo[player].RemoveCard(card); // removing the placed card from player's deck. set card's isplaced to true
+		card.SetIsPlaced(true);
 		
 		int energy = _playerInfo[player].GetEnergyTotal();
 		_playerInfo[player].SetEnergyTotal(energy - card.GetEnergyCost()); // reducing player's energy
@@ -321,10 +322,23 @@ public class GameRunner
 			if (locIndex == counter)
 			{
 				desiredLoc = loc;
+				break;
 			}
 			counter++;
 		}
 		return desiredLoc;
+	}
+
+	public bool CheckLocFull(int locIndex, IPlayer player)
+	{
+		if (_locationInfo[LocFromIndex(locIndex)].GetLocInfo()[player].Count > 3)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 
 	public bool PlayerPlaceCard(IPlayer player, int cardIndex, int locIndex)
@@ -341,9 +355,8 @@ public class GameRunner
 			}
 			counter++;
 		}
-		
 		ApplyOnRevealCards(player, desiredCard, desiredLoc, locIndex);
-		
+
 		PlayerPlaceCard(player, desiredCard, desiredLoc);
 		return true;
 	}
@@ -382,7 +395,7 @@ public class GameRunner
 				case CardType.Normal:
 					return true;
 
-				case CardType.PlacedOn_Middle_IncreaseBy3: // SEMUA KARTU DENGAN TIPE YANG SAMA KENA EFEK JUGA
+				case CardType.PlacedOn_Middle_IncreaseBy3:
 					if (locIndex == 2)
 					{
 						card.SetAttackingPower(card.GetAttackingPower() + 3);
@@ -395,12 +408,25 @@ public class GameRunner
 
 				case CardType.SameLocIncreaseBy2:
 					List<Card> playerCards = _locationInfo[loc].GetLocInfo()[player];
-					if (playerCards.Count > 0)
+					_locationInfo[loc].AddScore(player, playerCards.Count * 2);
+					// if (playerCards.Count > 0)
+					// {
+					// 	foreach (Card singleCard in playerCards)
+					// 	{
+					// 		singleCard.SetAttackingPower(singleCard.GetAttackingPower() + 2);
+					// 	}
+					// }
+					return true;
+				
+				case CardType.IncreaseAdjacentBy2:
+					if (locIndex == 2)
 					{
-						foreach (Card singleCard in playerCards)
-						{
-							singleCard.SetAttackingPower(singleCard.GetAttackingPower() + 2);
-						}
+						_locationInfo[LocFromIndex(1)].AddScore(player,2);
+						_locationInfo[LocFromIndex(3)].AddScore(player,2);
+					}
+					else
+					{
+						_locationInfo[LocFromIndex(2)].AddScore(player,2);
 					}
 					return true;
 			}
@@ -408,9 +434,9 @@ public class GameRunner
 		return false;
 	}
 	
-	// public bool ApplyOnGoingCards()
+	// public bool ApplyOnGoingCards(IPlayer player, Card card, Location loc, int locIndex)
 	// {
-	// 	throw new NotImplementedException();
+		
 	// }
 	
 	// Player Retreat

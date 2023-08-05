@@ -204,12 +204,14 @@ class Program
 							Tools.Print("Insert Location's index to place Card : ");
 							int locIndex = 0; 
 							bool marker1 = int.TryParse(Tools.Readln(), out locIndex);
-							while(!marker1 || locIndex > gameRunner.GetLocations().Count ||
+							bool locCond = gameRunner.CheckLocFull(locIndex,player);
+							while(!marker1 || !locCond || locIndex > gameRunner.GetLocations().Count ||
 									locIndex < 1)
 							{
-								Tools.Println("Invalid");
+								Tools.Println("Invalid or Locations is full (4 max)");
 								Tools.Print("Insert Location's index to place Card : ");
 								marker1 = int.TryParse(Tools.Readln(), out locIndex);
+								locCond = gameRunner.CheckLocFull(locIndex,player);
 							};
 							gameRunner.PlayerPlaceCard(player, cardIndex, locIndex);
 							cardValid = true;
