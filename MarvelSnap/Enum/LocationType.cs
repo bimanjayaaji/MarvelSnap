@@ -2,8 +2,7 @@ namespace MarvelSnapEnum;
 
 public enum LocationType
 {
-	NONE,
-	Normal,
+	Normal=1,
 	CardsHere_IncreaseBy5,
 	AfterEachTurn_IncreaseBy1,
 	Closed_OnTurn4,

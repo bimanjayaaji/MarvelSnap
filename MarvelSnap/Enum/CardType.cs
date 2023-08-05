@@ -2,8 +2,7 @@ namespace MarvelSnapEnum;
 
 public enum CardType
 {
-	NONE,
-	Normal,
+	Normal=1,
 	CombinedWith_3Cards_IncreaseBy3,
 	PlacedOn_Middle_IncreaseBy3,
 	Immortal_InDeck,

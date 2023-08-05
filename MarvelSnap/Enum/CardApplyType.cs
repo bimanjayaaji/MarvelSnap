@@ -2,8 +2,7 @@ namespace MarvelSnapEnum;
 
 public enum CardApplyType
 {
-	NONE,
-	Normal,
+	Normal=1,
 	OnReveal,
 	OnGoing,
 }

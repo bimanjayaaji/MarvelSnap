@@ -3,6 +3,7 @@ namespace MarvelSnap;
 public class PlayerConfig
 {
 	private int _finalScore;
+	private int _totalScore;
 	private int _energyTotal;
 	private List<Card> _cardDeck;
 	
@@ -56,5 +57,22 @@ public class PlayerConfig
 	public int GetFinalScore()
 	{
 		return _finalScore;
+	}
+	
+	public bool SetTotalScore(int totalScore)
+	{
+		_totalScore = totalScore;
+		return true;
+	}
+	
+	public bool AddTotalScore(int score)
+	{
+		_totalScore += score;
+		return true;
+	}
+	
+	public int GetTotalScore()
+	{
+		return _totalScore;
 	}
 }

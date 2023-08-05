@@ -65,7 +65,12 @@ public class LocationConfig
 		{
 			if (kvp.Value > highest)
 			{
+				highest = kvp.Value;
 				winner = kvp.Key;
+			} 
+			else if (kvp.Value == highest)
+			{
+				winner = null;
 			}
 		}
 		return winner;

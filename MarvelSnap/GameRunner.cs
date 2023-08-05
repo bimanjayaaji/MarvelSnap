@@ -415,7 +415,22 @@ public class GameRunner
 	
 	// Player Retreat
 	
-	public IPlayer DetermineWinner()
+	public Dictionary<IPlayer,int> GetTotalScore()
+	{
+		Dictionary<IPlayer,int> totalScore = new();
+		foreach (var kvpPlayer in _playerInfo)
+		{
+			int playerScore = 0;
+			foreach (var kvpLoc in _locationInfo)
+			{
+				playerScore += kvpLoc.Value.GetLocScore()[kvpPlayer.Key];
+			}
+			totalScore.Add(kvpPlayer.Key, playerScore);	
+		}
+		return totalScore;
+	}
+	
+	public string DetermineWinner()
 	{	
 		foreach (var kvp in GetLocationWinner())
 		{
@@ -428,15 +443,33 @@ public class GameRunner
 			}
 		}
 		
-		List<int> playersScore = new();
-
-		if (_playerInfo[GetPlayers()[0]].GetFinalScore() > _playerInfo[GetPlayers()[0]].GetFinalScore())
+		// List<int> playersScore = new();
+		int player1Score = _playerInfo[GetPlayers()[0]].GetFinalScore();
+		int player2Score = _playerInfo[GetPlayers()[1]].GetFinalScore();
+		if (player1Score > player2Score)
 		{
-			return GetPlayers()[0];
+			return GetPlayers()[0].GetName();
 		}
+		else if (player1Score < player2Score)
+		{
+			return GetPlayers()[1].GetName();
+		} 
 		else
 		{
-			return GetPlayers()[1];
+			int player1Total = GetTotalScore()[GetPlayers()[0]];
+			int player2Total = GetTotalScore()[GetPlayers()[1]];
+			if (player1Total > player2Total)
+			{
+				return GetPlayers()[0].GetName();
+			}
+			else if (player1Total < player2Total)
+			{
+				return GetPlayers()[1].GetName();
+			}
+			else
+			{
+				return "DRAW";
+			}
 		}
 	}
 	

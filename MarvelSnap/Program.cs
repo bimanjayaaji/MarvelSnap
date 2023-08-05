@@ -323,13 +323,22 @@ class Program
 	{
 		Console.Clear();
 		Tools.Println("----- GAME'S DONE -----");
-		Tools.Println($"Winner : {gameRunner.DetermineWinner().GetName()}");
+		Tools.Println($"Winner : {gameRunner.DetermineWinner()}");
 		Tools.BigSpace();
 		
 		foreach (var kvp in gameRunner.GetLocationWinner())
 		{
-			Tools.Print($"Location : {kvp.Key.GetName()} 		---> Winner : {kvp.Value.GetName()} ");	
-			Tools.Println($"({gameRunner.GetLocationScore(kvp.Key,gameRunner.GetPlayers()[0])} / {gameRunner.GetLocationScore(kvp.Key,gameRunner.GetPlayers()[1])})");
+			if (kvp.Value == null)
+			{
+				Tools.Print($"Location : {kvp.Key.GetName()} ---> Winner : DRAW ");		
+				Tools.Println($"({gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[0])} / {gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[1])})");
+			} 
+			else
+			{
+				Tools.Print($"Location : {kvp.Key.GetName()} ---> Winner : {kvp.Value.GetName()} ");
+				Tools.Println($"({gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[0])} / {gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[1])})");
+			}
+			
 		}
 		Console.ReadKey();
 	}
