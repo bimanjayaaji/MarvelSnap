@@ -16,6 +16,7 @@ namespace MarvelSnap;
 	[DataMember] private string? _description;
 	private bool _placed;
 	private bool _performed;
+	private bool _locEffect;
 
 	public Card(int id, string name, CardType type, CardApplyType applyType, int energyCost, int attackingPower)
 	{
@@ -27,6 +28,7 @@ namespace MarvelSnap;
 		_attackingPower = attackingPower;
 		_placed = false;
 		_performed = false;
+		_locEffect = false;
 		//_description = description;	
 	}
 	
@@ -95,6 +97,17 @@ namespace MarvelSnap;
 	public bool SetIsPerformed(bool state)
 	{
 		_performed = state;
+		return true;
+	}
+	
+	public bool IsLocEffect()
+	{
+		return _locEffect;
+	}
+	
+	public bool SetIsLocEffect(bool state)
+	{
+		_locEffect = state;
 		return true;
 	}
 }

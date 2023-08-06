@@ -47,4 +47,9 @@
    - [ ] pas player nempatin kartu di board, ga langsung munculin skor tapi nunggu semua player masukin kartu ke board. jadi di akhir round baru nampilin skor (Assigned : 230805. Done : _ )
    - [x] bug di winner, salah nentuin winner (Assigned : 230805. Done : 230805 )
    - [x] bug di winner, kalo ada loc yg kosong malah exception (Assigned : 230805. Done : 230805 )
+
+## 23-08-06 BUGS
+1. LocationSkill !!!
+   - [ ] belom apply OnPlacing location skill
+   - [ ] kadang masi ada bug di location nomer 3. still dont know why. kadang juga di loc 2.
    

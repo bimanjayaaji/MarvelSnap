@@ -9,6 +9,7 @@ public delegate bool WinningDelegate();
 public class GameRunner
 {
 	private int _round;
+	// private bool _isNewRound;
 	private string? _winner;
 	private GameStatus _gameStatus;
 	private List<Card> _allCards;
@@ -20,13 +21,14 @@ public class GameRunner
 	public GameRunner()
 	{
 		_round = 0;
+		// _isNewRound = false;
 		_gameStatus = GameStatus.NOT_STARTED;
 		_allCards = new();
 		_allLocations = new();
 		_playerInfo = new(); 
 		_locationInfo = new();
 		GenerateAllCards();
-		GenerateAllLocations();		
+		GenerateAllLocations();
 		_winningEvent += DetermineWinner;
 	}
 	
@@ -366,10 +368,14 @@ public class GameRunner
 		}
 		
 		PlayerPlaceCard(player, desiredCard, desiredLoc);
+		
 		CardSkill.ApplyOnRevealCards(this, player, desiredCard, desiredLoc, locIndex);
 		CardSkill.ApplyOnGoingCards(this);
+		LocationSkill.ApplyOnGoingLocs(this);
 		
 		desiredCard.SetIsPlayed(true);
+		
+		
 		
 		return true;
 	}
@@ -381,14 +387,15 @@ public class GameRunner
 
 	public List<Location> RevealLocation()
 	{
-		List<Location> revealLoc = new();
 		int num = 0;
+		List<Location> revealLoc = new();
 		
 		foreach (Location loc in _locationInfo.Keys)
 		{
 			if (num < CheckCurrentRound())
 			{
 				revealLoc.Add(loc);
+				loc.SetIsRevealed(true);
 				num += 1;
 			} 
 			else
@@ -490,6 +497,11 @@ public class GameRunner
 		
 		return true;
 	}
+	
+	// public bool CheckNewRound()
+	// {
+	// 	return _isNewRound;
+	// }
 	
 	public GameStatus CheckGameStatus()
 	{

@@ -35,12 +35,12 @@ public class Serialization
 	{
 		List<Location> allLocs = new()
 		{
-			new(1,"Ruins",LocationType.Normal),
-			new(2,"Nidavellir", LocationType.CardsHere_IncreaseBy5),
-			new(3,"Muir Island",LocationType.AfterEachTurn_IncreaseBy1),
-			new(4,"Kyln",LocationType.Closed_OnTurn4),
-			new(5,"The Big House",LocationType.Cost456_CantPlay),
-			new(6,"Atlantis",LocationType.IfOnlyOne_IncreaseBy5)
+			new(1,"Ruins",LocationType.Normal,LocApplyType.Normal),
+			new(2,"Nidavellir", LocationType.CardsHere_IncreaseBy5,LocApplyType.OnGoing),
+			new(3,"Cloning Vats",LocationType.PlayHere_AddACopy,LocApplyType.OnGoing),
+			new(4,"Kyln",LocationType.Closed_OnTurn4,LocApplyType.OnPlacing),
+			new(5,"The Big House",LocationType.Cost456_CantPlay,LocApplyType.OnPlacing),
+			new(6,"Atlantis",LocationType.IfOnlyOne_IncreaseBy5,LocApplyType.OnGoing)
 		};
 		FileStream stream = new FileStream("Locations.json", FileMode.Create);
 		using (var writer = JsonReaderWriterFactory.CreateJsonWriter(stream, Encoding.UTF8, true, true, "  "))
