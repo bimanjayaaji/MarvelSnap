@@ -4,15 +4,18 @@ using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
 namespace MarvelSnap;
 
+public delegate bool WinningDelegate();
 
 public class GameRunner
 {
 	private int _round;
+	private string? _winner;
 	private GameStatus _gameStatus;
 	private List<Card> _allCards;
 	private List<Location>? _allLocations;
 	private Dictionary<IPlayer,PlayerConfig> _playerInfo;
 	private Dictionary<Location,LocationConfig> _locationInfo;
+	private WinningDelegate? _winningEvent;
 	
 	public GameRunner()
 	{
@@ -23,7 +26,8 @@ public class GameRunner
 		_playerInfo = new(); 
 		_locationInfo = new();
 		GenerateAllCards();
-		GenerateAllLocations();
+		GenerateAllLocations();		
+		_winningEvent += DetermineWinner;
 	}
 	
 	public bool AddPlayer(IPlayer player)
@@ -207,18 +211,9 @@ public class GameRunner
 		return _locationInfo.Keys.ToList();
 	}
 	
-	public Dictionary<Location,Dictionary<IPlayer,List<Card>>> GetLocationCards()
+	public Dictionary<Location,LocationConfig> GetLocationInfo()
 	{
-		Dictionary<Location,Dictionary<IPlayer,List<Card>>> locCards = new();
-		foreach (KeyValuePair<Location,LocationConfig> locInfo in _locationInfo)
-		{
-			locCards.Add(locInfo.Key, locInfo.Value.GetLocInfo());
-		}
-		
-		return locCards;
-		// add exception/warning if _locationInfo is still Empty
-		// biar ga terlalu kompleks. method GetLocInfo di LocationConfig dioverload, kasi parameter IPlayer
-		// Dictionary<IPlayer,List<Card> isa dibikin KVP
+		return _locationInfo;
 	}
 	
 	public Dictionary<IPlayer,List<Card>> GetLocationCards(Location loc)
@@ -310,7 +305,7 @@ public class GameRunner
 		LocationConfig config = _locationInfo[loc];
 		config.PlaceCard(player, card);
 		
-		_playerInfo[player].RemoveCard(card); // removing the placed card from player's deck. set card's isplaced to true
+		_playerInfo[player].RemoveCard(card); // removing the placed card from player's deck. set card's isperformed to true
 		if (card.GetApplyType() != CardApplyType.OnGoing)
 		{
 			card.SetIsPerformed(true);
@@ -371,8 +366,8 @@ public class GameRunner
 		}
 		
 		PlayerPlaceCard(player, desiredCard, desiredLoc);
-		ApplyOnRevealCards(player, desiredCard, desiredLoc, locIndex);
-		ApplyOnGoingCards();
+		CardSkill.ApplyOnRevealCards(this, player, desiredCard, desiredLoc, locIndex);
+		CardSkill.ApplyOnGoingCards(this);
 		
 		desiredCard.SetIsPlayed(true);
 		
@@ -384,7 +379,7 @@ public class GameRunner
 		return PlayerCardOptions(player).Contains(GetPlayerCards(player)[cardIndex-1]);
 	}
 
-	public virtual List<Location> RevealLocation()
+	public List<Location> RevealLocation()
 	{
 		List<Location> revealLoc = new();
 		int num = 0;
@@ -404,77 +399,6 @@ public class GameRunner
 		return revealLoc;
 	}
 	
-	public bool ApplyOnRevealCards(IPlayer player, Card card, Location loc, int locIndex)
-	{
-		if (card.GetApplyType() == CardApplyType.OnReveal)
-		{
-			switch (card.GetSkill())
-			{
-				case CardType.Normal:
-					return true;
-
-				case CardType.PlacedOn_Middle_IncreaseBy3:
-					if (locIndex == 2)
-					{
-						// card.SetAttackingPower(card.GetAttackingPower() + 3);
-						_locationInfo[loc].AddScore(player,3);
-					}
-					return true;
-
-				case CardType.Immortal_InDeck:
-					SetCardsToPlayer(player, card);
-					return true;
-
-				case CardType.SameLocIncreaseBy2:
-					List<Card> playerCards = _locationInfo[loc].GetLocInfo()[player];
-					_locationInfo[loc].AddScore(player, (playerCards.Count-1) * 2); // mines 1!
-					return true;
-				
-				case CardType.IncreaseAdjacentBy2:
-					if (locIndex == 2)
-					{
-						_locationInfo[LocFromIndex(1)].AddScore(player,2);
-						_locationInfo[LocFromIndex(3)].AddScore(player,2);
-					}
-					else
-					{
-						_locationInfo[LocFromIndex(2)].AddScore(player,2);
-					}
-					return true;
-			}
-		}
-		return false;
-	}
-	
-	public bool ApplyOnGoingCards()
-	{
-		foreach (Location loc in GetLocations())
-		{
-			foreach (IPlayer player in GetPlayers())
-			{
-				foreach (Card card in GetPlayerCardsOnLoc(loc, player))
-				{
-					if (card.GetApplyType() == CardApplyType.OnGoing)
-					{
-						if (!card.IsPerformed()) // logic for ongoing cards here and beyond
-						{
-							if (card.GetSkill() == CardType.CombinedWith_3Cards_IncreaseBy3)
-							{
-								List<Card> playerCards = _locationInfo[loc].GetLocInfo()[player];
-								if(playerCards.Count == 4)
-									{
-										_locationInfo[loc].AddScore(player, 3);
-										card.SetIsPerformed(true);
-									}
-							}
-						}
-					}
-				}
-			}			
-		}
-		return true;
-	}
-	
 	public Dictionary<IPlayer,int> GetTotalScore()
 	{
 		Dictionary<IPlayer,int> totalScore = new();
@@ -490,7 +414,7 @@ public class GameRunner
 		return totalScore;
 	}
 	
-	public string DetermineWinner()
+	public bool DetermineWinner()
 	{	
 		foreach (var kvp in GetLocationWinner())
 		{
@@ -508,11 +432,11 @@ public class GameRunner
 		int player2Score = _playerInfo[GetPlayers()[1]].GetFinalScore();
 		if (player1Score > player2Score)
 		{
-			return GetPlayers()[0].GetName();
+			_winner = GetPlayers()[0].GetName();
 		}
 		else if (player1Score < player2Score)
 		{
-			return GetPlayers()[1].GetName();
+			_winner = GetPlayers()[1].GetName();
 		} 
 		else
 		{
@@ -520,17 +444,23 @@ public class GameRunner
 			int player2Total = GetTotalScore()[GetPlayers()[1]];
 			if (player1Total > player2Total)
 			{
-				return GetPlayers()[0].GetName();
+				_winner = GetPlayers()[0].GetName();
 			}
 			else if (player1Total < player2Total)
 			{
-				return GetPlayers()[1].GetName();
+				_winner = GetPlayers()[1].GetName();
 			}
 			else
 			{
-				return "DRAW";
+				_winner = "DRAW";
 			}
 		}
+		return true;
+	}
+	
+	public string GetWinner()
+	{
+		return _winner;
 	}
 	
 	public bool GoNextRound()
@@ -545,6 +475,7 @@ public class GameRunner
 			if (_round == 6)
 			{
 				_gameStatus = GameStatus.ENDED;	
+				_winningEvent?.Invoke();
 			} 
 			else
 			{

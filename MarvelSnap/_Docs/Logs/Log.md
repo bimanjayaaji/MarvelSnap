@@ -36,10 +36,15 @@
    - [x] onreveal card skill --> 4 (Assigned : 230805. Done : 230805 )
    - [x] ongoing card skill --> 4 (Assigned : 230805. Done : 230805 )
    - [ ] location skill (Assigned : 230801. Done : _ )
+   - [x] delegates
    - [x] 4 max cards on each location (Assigned : 230805. Done : 230805 )
    - [ ] 0 to pass turn on insert location index to place card prompt (Assigned : 230805. Done : _ )
+   - [ ] rapihin code. hapus yang ga perlu
+   - [ ] check DRY in overload methods
+   - [ ] update class diagram
 2. Minor
    - [ ] display "location 1" and "Location 2" in the early round (Assigned : 230805. Done : _ )
    - [ ] pas player nempatin kartu di board, ga langsung munculin skor tapi nunggu semua player masukin kartu ke board. jadi di akhir round baru nampilin skor (Assigned : 230805. Done : _ )
    - [x] bug di winner, salah nentuin winner (Assigned : 230805. Done : 230805 )
    - [x] bug di winner, kalo ada loc yg kosong malah exception (Assigned : 230805. Done : 230805 )
+   

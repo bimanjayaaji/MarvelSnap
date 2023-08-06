@@ -155,8 +155,10 @@ class Program
 		gameRunner.SetLocations();
 		
 		// START ROUND
-		Tools.Println("Let's Play!");
+		Tools.Println("Let's Play! (Press any key to start the game)");
 		Tools.BigSpace();
+		Console.ReadKey();
+		
 		gameRunner.GoNextRound();
 		while (gameRunner.CheckGameStatus() == GameStatus.ONGOING)
 		{
@@ -164,8 +166,6 @@ class Program
 			gameRunner.SetCardsToPlayer(player1,gameRunner.CheckCurrentRound());
 			gameRunner.SetCardsToPlayer(player2,gameRunner.CheckCurrentRound());
 			
-			// Display Locations and Players's cards
-			// GameDisplay1_Testing(gameRunner);
 			Console.Clear();
 			
 			// Players place card
@@ -213,7 +213,7 @@ class Program
 								marker1 = int.TryParse(Tools.Readln(), out locIndex);
 								locCond = gameRunner.CheckLocFull(locIndex,player);
 							};
-							gameRunner.PlayerPlaceCard(player, cardIndex, locIndex);
+							gameRunner.PlayerPlaceCard(player, cardIndex, locIndex); // delegate
 							cardValid = true;
 						}
 						else
@@ -258,13 +258,9 @@ class Program
 				} 
 			}
 			
-			// Go Next Round
-			// gameRunner.ApplyOnRevealCards(); // !!! on progress
-			// gameRunner.ApplyOnGoingCards(); // !!! on progress
 			gameRunner.GoNextRound();
 		}
 		
-		//determine winner
 		GameDisplay3_Testing(gameRunner);
 	}
 	
@@ -325,7 +321,7 @@ class Program
 	{
 		Console.Clear();
 		Tools.Println("----- GAME'S DONE -----");
-		Tools.Println($"Winner : {gameRunner.DetermineWinner()}");
+		Tools.Println($"Winner : {gameRunner.GetWinner()}");
 		Tools.BigSpace();
 		
 		foreach (var kvp in gameRunner.GetLocationWinner())

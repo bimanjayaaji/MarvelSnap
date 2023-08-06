@@ -1,34 +1,17 @@
+using MarvelSnapEnum;
+using MarvelSnapInterface;
+
 namespace MarvelSnap;
 
-public class LocationSkill
+public static class LocationSkill
 {
-	public bool Normal()
+	public static bool ApplyOnGoingLocs(GameRunner gameRunner)
 	{
-		throw new NotImplementedException();
+		return true;
 	}
 	
-	public bool CardsHere_IncreaseBy5()
+	public static bool ApplyPlacingCards(GameRunner gameRunner)
 	{
-		throw new NotImplementedException();
-	}	
-	
-	public bool AfterEachTurn_IncreaseBy1()
-	{
-		throw new NotImplementedException();
-	}	
-	
-	public bool Closed_OnTurn4()
-	{
-		throw new NotImplementedException();
-	}	
-	
-	public bool Cost456_CantPlay()
-	{
-		throw new NotImplementedException();
-	}	
-	
-	public bool IfOnlyOne_IncreaseBy5()
-	{
-		throw new NotImplementedException();
+		return true;
 	}
 }
