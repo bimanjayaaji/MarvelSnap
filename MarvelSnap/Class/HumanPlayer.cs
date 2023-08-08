@@ -1,12 +1,15 @@
 using MarvelSnapInterface;
 namespace MarvelSnap;
 
+/// <summary>
+/// HumanPlayer class that inherit IPlayer interface. Represents the player's identity. It has name and id attributes.
+/// </summary>
 public class HumanPlayer : IPlayer
 {
 	private string? _name = "";
 	private int _id = 0;
 	private static int _lastId = 0;
-	private static List<int> _assignedId = new(); // List<> --> reusable in other game
+	private static List<int> _assignedId = new();
 	private static List<string?> _assignedName = new();
 	
 	public HumanPlayer(string? name)

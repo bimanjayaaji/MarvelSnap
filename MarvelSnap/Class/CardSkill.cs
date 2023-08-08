@@ -3,8 +3,25 @@ using MarvelSnapInterface;
 
 namespace MarvelSnap;
 
+/// <summary>
+/// CardSkill is a static class that is used or called when the game will
+/// apply the skill of each card. 
+/// </summary>
 public static class CardSkill
 {
+	/// <summary>
+	/// This method handles the implementation of the card's skill, typically a card that has
+	/// OnReveal type. This method is used once only in each turn, meaning that it has no iteration whatsoever
+	/// throughout the game. Instead, it uses switch-case to filter what kind of skill does the card have, and
+	/// implement it directly when it is called. !!! If you want to add a new skill, you can add a new case in the
+	/// swtich-case algorithm.
+	/// </summary>
+	/// <param name="gameRunner"></param>
+	/// <param name="player"></param>
+	/// <param name="card"></param>
+	/// <param name="loc"></param>
+	/// <param name="locIndex"></param>
+	/// <returns></returns>
 	public static bool ApplyOnRevealCards(GameRunner gameRunner, IPlayer player, Card card, Location loc, int locIndex)
 	{
 		if (card.GetApplyType() == CardApplyType.OnReveal)
@@ -47,6 +64,14 @@ public static class CardSkill
 		return false;
 	}
 	
+	/// <summary>
+	/// This method handles the implementation of the OnGoing Card. It differs with the OnReveal card
+	/// in a sense that, this method will iterate continuously throughout the game to scan which card
+	/// that meets the conditions for it to implements its skill. If you want to add a new skill, you can add
+	/// the algorithm for the skill inside if (!card.IsPerformed()) logic sequence.
+	/// </summary>
+	/// <param name="gameRunner"></param>
+	/// <returns></returns>
 	public static bool ApplyOnGoingCards(GameRunner gameRunner)
 	{
 		foreach (Location loc in gameRunner.GetLocations())

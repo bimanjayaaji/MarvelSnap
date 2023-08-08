@@ -1,10 +1,14 @@
 using MarvelSnapEnum;
 using MarvelSnapInterface;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MarvelSnap;
 
+/// <summary>
+/// Represents a character card. Has some attributes associated with the character
+/// and some methods to access and set the value of the attributes. Using DataContract
+/// so that it can be used to generate all cards from .json file in GameRunner.
+/// </summary>
 [DataContract] public class Card : ICard, ICardAbility
 {
 	[DataMember] private int _id;
@@ -18,6 +22,15 @@ namespace MarvelSnap;
 	private bool _performed;
 	private bool _locEffect;
 
+	/// <summary>
+	/// Constructor is used to set all the initial values of the card instance.
+	/// </summary>
+	/// <param name="id"></param>
+	/// <param name="name"></param>
+	/// <param name="type"></param>
+	/// <param name="applyType"></param>
+	/// <param name="energyCost"></param>
+	/// <param name="attackingPower"></param>
 	public Card(int id, string name, CardType type, CardApplyType applyType, int energyCost, int attackingPower)
 	{
 		_id = id;
@@ -29,7 +42,6 @@ namespace MarvelSnap;
 		_placed = false;
 		_performed = false;
 		_locEffect = false;
-		//_description = description;	
 	}
 	
 	public int GetId()
@@ -42,11 +54,21 @@ namespace MarvelSnap;
 		return _name;
 	}
 	
+	/// <summary>
+	/// CardType defines the skill type that the character/card has.
+	/// Refer to the CardType.cs Enum file.
+	/// </summary>
+	/// <returns></returns>
 	public CardType GetSkill()
 	{
 		return _type;
 	}
 	
+	/// <summary>
+	/// CardApplyType defines when the effect of the card will affect the score.
+	/// Consists of Normal, OnGoing, and OnReveal. Refer to the CardApplyType.cs Enum file.
+	/// </summary>
+	/// <returns></returns>
 	public CardApplyType GetApplyType()
 	{
 		return _applyType;
@@ -78,6 +100,10 @@ namespace MarvelSnap;
 		return true;
 	}	
 	
+	/// <summary>
+	/// Returns true if the card has already been placed on the board.
+	/// </summary>
+	/// <returns></returns>
 	public bool IsPlayed()
 	{
 		return _placed;
@@ -89,6 +115,11 @@ namespace MarvelSnap;
 		return true;
 	}
 	
+	/// <summary>
+	/// Returns true when the skill of the card has already been performed.
+	/// This method would look obvious to differ OnReveal and OnGoing card type.
+	/// </summary>
+	/// <returns></returns>
 	public bool IsPerformed()
 	{
 		return _performed;
@@ -100,6 +131,11 @@ namespace MarvelSnap;
 		return true;
 	}
 	
+	/// <summary>
+	/// Returns true when the card has already been affected
+	/// by the location's skill
+	/// </summary>
+	/// <returns></returns>
 	public bool IsLocEffect()
 	{
 		return _locEffect;

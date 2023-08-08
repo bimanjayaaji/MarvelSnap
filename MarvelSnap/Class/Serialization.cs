@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Serialization;
 
+/// <summary>
+/// Technically just a helper class to serialize and deserialize list of class and location to .json.
+/// </summary>
 public class Serialization
 {
 	public static readonly DataContractJsonSerializerSettings Settings = 
@@ -56,10 +59,5 @@ public class Serialization
 		var ser = new DataContractJsonSerializer(typeof(List<Card>));
 		FileStream stream2 = new FileStream("Cards.json", FileMode.OpenOrCreate);
 		List<Card> allCards = (List<Card>)ser?.ReadObject(stream2);
-		
-		// foreach (var card in allCards)
-		// {
-		// 	Console.WriteLine(card.GetId() + " " + card.GetName() + " " + card.GetType() + " " + card.GetEnergyCost() + " " + person.GetAttackingPower());
-		// }
 	}
 }

@@ -3,6 +3,11 @@ using MarvelSnapInterface;
 using System.Runtime.Serialization; // added
 namespace MarvelSnap;
 
+/// <summary>
+/// Location class that inherit the ILocation interface. It has some attributes that represent the location itself
+/// such as id, name, type, applyType, description, and revealed. The revealed variable determines whether or not
+/// the Location has been revealed throughout the game.
+/// </summary>
 [DataContract] public class Location : ILocation
 {
 	[DataMember] private int _id;

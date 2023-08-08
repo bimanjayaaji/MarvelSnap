@@ -2,6 +2,7 @@ using  MarvelSnapInterface;
 using MarvelSnapEnum;
 using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
+
 namespace MarvelSnap;
 
 public delegate bool WinningDelegate();
@@ -32,6 +33,12 @@ public class GameRunner
 		_winningEvent += DetermineWinner;
 	}
 	
+	/// <summary>
+	/// Method to add new player in the game. Returns true when successfully add new player.
+	/// You should make a new instance of a player first, then pass that object to this method
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
 	public bool AddPlayer(IPlayer player)
 	{
 		if (_playerInfo.Count < 2)
@@ -53,6 +60,10 @@ public class GameRunner
 		return false;
 	}
 	
+	/// <summary>
+	/// Returns list of IPlayer objects thats been assigned
+	/// </summary>
+	/// <returns></returns>
 	public List<IPlayer> GetPlayers()
 	{
 		List<IPlayer> players = new();
@@ -63,38 +74,68 @@ public class GameRunner
 		return players;
 	}
 	
+	/// <summary>
+	/// Returns current round
+	/// </summary>
+	/// <returns></returns>
 	public int CheckCurrentRound()
 	{
 		return _round;
 	}
 	
+	/// <summary>
+	/// Generate all cards from .json file. Called only once in GR constructor
+	/// </summary>
+	/// <returns></returns>
 	private bool GenerateAllCards() // called when generating new instance of GR
 	{		
 		var ser = new DataContractJsonSerializer(typeof(List<Card>));
-		FileStream stream = new FileStream(@"D:\Learner\000 Work\230609 Formulatrix Bootcamp\MarvelSnap\MarvelSnap\MarvelSnap\Database\Cards.json", FileMode.OpenOrCreate);
+		string currentFolder = Directory.GetCurrentDirectory();
+		string fullPath = Path.Combine(currentFolder,@"Database\Cards.json");
+		FileStream stream = new FileStream(fullPath, FileMode.OpenOrCreate);
 		_allCards = (List<Card>)ser?.ReadObject(stream);
 		
 		return true;
 	}
 	
+	/// <summary>
+	/// Returns all cards that were generated from .json file
+	/// </summary>
+	/// <returns></returns>
 	public List<Card> GetAllCards()
 	{
 		return _allCards;
 	}
 	
+	/// <summary>
+	/// Generate all locations from .json file. Called only once in GR constructor
+	/// </summary>
+	/// <returns></returns>
 	private bool GenerateAllLocations() // called when generating new instance of GR
 	{
 		var ser = new DataContractJsonSerializer(typeof(List<Location>));
-		FileStream stream = new FileStream(@"D:\Learner\000 Work\230609 Formulatrix Bootcamp\MarvelSnap\MarvelSnap\MarvelSnap\Database\Locations.json", FileMode.OpenOrCreate);
+		string currentFolder = Directory.GetCurrentDirectory();
+		string fullPath = Path.Combine(currentFolder,@"Database\Locations.json");
+		FileStream stream = new FileStream(fullPath, FileMode.OpenOrCreate);
 		_allLocations = (List<Location>)ser?.ReadObject(stream);
 		return true;
 	}
 	
+	/// <summary>
+	/// Returns all locations generated from .json file
+	/// </summary>
+	/// <returns></returns>
 	public List<Location>? GetAllLocations()
 	{
 		return _allLocations;
 	}
 	
+	/// <summary>
+	/// Gives particular player random cards according to the round. In round 1, players are given 4 cards.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="round"></param>
+	/// <returns></returns>
 	public bool SetCardsToPlayer(IPlayer player, int round)
 	{
 		PlayerConfig playerConfig = _playerInfo[player];
@@ -130,6 +171,12 @@ public class GameRunner
 		return true;
 	}
 	
+	/// <summary>
+	/// Gives particular player a particular card
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="card"></param>
+	/// <returns></returns>
 	public bool SetCardsToPlayer(IPlayer player, Card card)
 	{
 		PlayerConfig playerConfig = _playerInfo[player];
@@ -139,6 +186,10 @@ public class GameRunner
 		return true;
 	}
 	
+	/// <summary>
+	/// Returns all cards that are owned by all players in Dictionary
+	/// </summary>
+	/// <returns></returns>
 	public Dictionary<IPlayer, List<Card>> GetPlayerCards()
 	{
 		Dictionary<IPlayer, List<Card>> playerCards = new();
@@ -151,11 +202,20 @@ public class GameRunner
 		return playerCards;
 	}
 	
+	/// <summary>
+	/// Returns all cards that are owned by particular player
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
 	public List<Card> GetPlayerCards(IPlayer player)
 	{
 		return _playerInfo[player].GetCardDeck();
 	}
 	
+	/// <summary>
+	/// Returns player's energy in dictionary form
+	/// </summary>
+	/// <returns></returns>
 	public Dictionary<IPlayer,int> GetPlayerEnergy()
 	{
 		Dictionary<IPlayer,int> energy = new();
@@ -168,11 +228,20 @@ public class GameRunner
 		return energy;
 	}
 	
+	/// <summary>
+	/// Returns particular player's energy
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
 	public int GetPlayerEnergy(IPlayer player)
 	{
 		return _playerInfo[player].GetEnergyTotal();
 	}
 	
+	/// <summary>
+	/// Returns true after successfully assign 3 random locations to be played on in the game
+	/// </summary>
+	/// <returns></returns>
 	public bool SetLocations()
 	{
 		Random random = new();
@@ -198,6 +267,11 @@ public class GameRunner
 		return true;
 	}
 	
+	/// <summary>
+	/// Returns true after successfully set customized locations from the user to be played on in the game
+	/// </summary>
+	/// <param name="locList"></param>
+	/// <returns></returns>
 	public bool SetLocations(List<Location> locList)
 	{
 		foreach (var loc in locList)
@@ -208,27 +282,51 @@ public class GameRunner
 		return true;
 	}
 	
+	/// <summary>
+	/// Returns list of all locations that were chosen and stored in _locationInfo variable
+	/// </summary>
+	/// <returns></returns>
 	public List<Location> GetLocations()
 	{
 		return _locationInfo.Keys.ToList();
 	}
 	
+	/// <summary>
+	/// Returns dictionary of location and its locationConfig
+	/// </summary>
+	/// <returns></returns>
 	public Dictionary<Location,LocationConfig> GetLocationInfo()
 	{
 		return _locationInfo;
 	}
 	
+	/// <summary>
+	/// Returns cards that are already placed on all locations by all players in dictionary form
+	/// </summary>
+	/// <param name="loc"></param>
+	/// <returns></returns>
 	public Dictionary<IPlayer,List<Card>> GetLocationCards(Location loc)
 	{
 		return _locationInfo[loc].GetLocInfo();
 		// add exception/warning if the loc argument doesn't exist in _locationInfo	
 	}
 	
+	/// <summary>
+	/// Returns list of cards that's been placed by a particular player in particular location
+	/// </summary>
+	/// <param name="loc"></param>
+	/// <param name="player"></param>
+	/// <returns></returns>
 	public List<Card> GetPlayerCardsOnLoc(Location loc, IPlayer player)
 	{
 		return _locationInfo[loc].GetPlayerCardsOnLoc(player);
 	}
 	
+	/// <summary>
+	/// Returns all scores of all players from all locations in Dictionary form. Not recommended to be used.
+	/// Use the overload method instead.
+	/// </summary>
+	/// <returns></returns>
 	public Dictionary<Location,Dictionary<IPlayer,int>> GetLocationScore()
 	{
 		Dictionary<Location,Dictionary<IPlayer,int>> locScore = new();
@@ -242,17 +340,34 @@ public class GameRunner
 		// TINGGAL MANGGIL GETLOCATIONSCORE(...) TO NJAY! ^-^
  	}
 	
+	/// <summary>
+	/// Returns players scores in particular location
+	/// </summary>
+	/// <param name="loc"></param>
+	/// <returns></returns>
 	public Dictionary<IPlayer,int> GetLocationScore(Location loc)
 	{
 		return _locationInfo[loc].GetLocScore();
 		// add exception/warning if the loc argument doesn't exist in _locationInfo
 	}
 	
+	/// <summary>
+	/// Return the score of particular player in particular location
+	/// </summary>
+	/// <param name="loc"></param>
+	/// <param name="player"></param>
+	/// <returns></returns>
 	public int GetLocationScore(Location loc, IPlayer player)
 	{
 		return _locationInfo[loc].GetLocScore()[player];
 	}
 	
+	/// <summary>
+	/// Returns players's scores in particular location. This method differs from its brothers in a way that
+	/// it takes location index that was chosen by user/player as an argument
+	/// </summary>
+	/// <param name="locIndex"></param>
+	/// <returns></returns>
 	public Dictionary<IPlayer,int> GetLocationScore(int locIndex)
 	{
 		Location? desiredLoc = null;
@@ -271,6 +386,10 @@ public class GameRunner
 		return config.GetLocScore();
 	}
 	
+	/// <summary>
+	/// Returns the winner in each loaction
+	/// </summary>
+	/// <returns></returns>
 	public Dictionary<Location,IPlayer> GetLocationWinner()
 	{
 		Dictionary<Location,IPlayer> winners = new();
@@ -281,11 +400,22 @@ public class GameRunner
 		return winners;
 	}
 	
+	/// <summary>
+	/// Returns the winner from particular location
+	/// </summary>
+	/// <param name="loc"></param>
+	/// <returns></returns>
 	public IPlayer GetLocationWinner(Location loc)
 	{
 		return _locationInfo[loc].GetLocWinner();	
 	}
 	
+	/// <summary>
+	/// Returns list of cards that are possible to be chosen by particulat player. This method consider
+	/// the amount of energy that a player has.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
 	public List<Card> PlayerCardOptions(IPlayer player)
 	{
 		List<Card> options = new();
@@ -302,6 +432,14 @@ public class GameRunner
 		return options;
 	}
 	
+	/// <summary>
+	/// Placing a card that has been chosen by a player to a particular location. Takes player, card, and location
+	/// as passing arguments 
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="card"></param>
+	/// <param name="loc"></param>
+	/// <returns></returns>
 	public bool PlayerPlaceCard(IPlayer player, Card card, Location loc)
 	{
 		LocationConfig config = _locationInfo[loc];
@@ -319,6 +457,12 @@ public class GameRunner
 		return true;
 	}
 
+	/// <summary>
+	/// Method to determines the actual location that was chosen by the player. Takes an integer of location
+	/// index, passed by user when choosing the location. Returns location object.
+	/// </summary>
+	/// <param name="locIndex"></param>
+	/// <returns></returns>
 	public Location LocFromIndex(int locIndex)
 	{
 		Location? desiredLoc = null;
@@ -335,6 +479,12 @@ public class GameRunner
 		return desiredLoc;
 	}
 
+	/// <summary>
+	/// Checking whether or not the location has been filled with 4 cards. Returns false is the location is full
+	/// </summary>
+	/// <param name="locIndex"></param>
+	/// <param name="player"></param>
+	/// <returns></returns>
 	public bool CheckLocFull(int locIndex, IPlayer player)
 	{
 		if (locIndex < 1 || locIndex > GetLocations().Count)
@@ -352,6 +502,15 @@ public class GameRunner
 		}
 	}
 
+	/// <summary>
+	/// Just like its brother, just differs in the arguments. This method takes the index of the passed
+	/// card index and location index from user and determines by itself what are the actual card and location
+	/// that are desired by user.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="cardIndex"></param>
+	/// <param name="locIndex"></param>
+	/// <returns></returns>
 	public bool PlayerPlaceCard(IPlayer player, int cardIndex, int locIndex)
 	{
 		Card desiredCard = GetPlayerCards(player)[cardIndex-1];
@@ -371,20 +530,39 @@ public class GameRunner
 		
 		CardSkill.ApplyOnRevealCards(this, player, desiredCard, desiredLoc, locIndex);
 		CardSkill.ApplyOnGoingCards(this);
-		LocationSkill.ApplyOnGoingLocs(this);
+		// LocationSkill.ApplyOnGoingLocs(this);
 		
 		desiredCard.SetIsPlayed(true);
 		
-		
-		
+		return true;
+	}
+	
+	/// <summary>
+	/// Method for calling the static method "ApplyOnGoingLocs" from LocationSkill class.
+	/// </summary>
+	/// <returns></returns>
+	public bool ApplyOnGoingLocs()
+	{
+		LocationSkill.ApplyOnGoingLocs(this);
 		return true;
 	}
 
+	/// <summary>
+	/// Method to check whether or not the card thats been chosen by user is valid. Considering
+	/// the amount of energy that the user has.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="cardIndex"></param>
+	/// <returns></returns>
 	public bool CheckCardValid(IPlayer player,int cardIndex)
 	{
 		return PlayerCardOptions(player).Contains(GetPlayerCards(player)[cardIndex-1]);
 	}
 
+	/// <summary>
+	/// Returns list of location that will be revealed in each round.
+	/// </summary>
+	/// <returns></returns>
 	public List<Location> RevealLocation()
 	{
 		int num = 0;
@@ -406,6 +584,10 @@ public class GameRunner
 		return revealLoc;
 	}
 	
+	/// <summary>
+	/// Return total/summation score thats been collected by players from all locations
+	/// </summary>
+	/// <returns></returns>
 	public Dictionary<IPlayer,int> GetTotalScore()
 	{
 		Dictionary<IPlayer,int> totalScore = new();
@@ -421,6 +603,10 @@ public class GameRunner
 		return totalScore;
 	}
 	
+	/// <summary>
+	/// MEthod to determine who is the winner, or the state of the game because there is a "draw" possibility
+	/// </summary>
+	/// <returns></returns>
 	public bool DetermineWinner()
 	{	
 		foreach (var kvp in GetLocationWinner())
@@ -465,11 +651,19 @@ public class GameRunner
 		return true;
 	}
 	
+	/// <summary>
+	/// Returns string of the winner of the game. Could be "DRAW"
+	/// </summary>
+	/// <returns></returns>
 	public string GetWinner()
 	{
 		return _winner;
 	}
 	
+	/// <summary>
+	/// Set the game to the next round. Set the GameStatus and add more energy.
+	/// </summary>
+	/// <returns></returns>
 	public bool GoNextRound()
 	{	
 		if (_gameStatus == GameStatus.NOT_STARTED)
@@ -503,6 +697,10 @@ public class GameRunner
 	// 	return _isNewRound;
 	// }
 	
+	/// <summary>
+	/// Returns the status of the game
+	/// </summary>
+	/// <returns></returns>
 	public GameStatus CheckGameStatus()
 	{
 		return _gameStatus;
