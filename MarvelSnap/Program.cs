@@ -23,12 +23,27 @@ partial class Program
 		Tools.SmallSpace();
 		
 		// ENTER PLAYER'S IDENTITY
-		Console.Write("Input first player's name : ");
-		IPlayer player1 = new HumanPlayer(Console.ReadLine());
+		string name;
+		IPlayer player1, player2;
+		do
+		{
+			Console.Write("Input first player's name : ");	
+			name = Console.ReadLine();
+			player1 = new HumanPlayer(name);
+		} while (name == "" || player1.GetName() == "");
+		// IPlayer player1 = new HumanPlayer(name);
 		gameRunner.AddPlayer(player1);
-		Console.Write("Input second player's name : ");
-		IPlayer player2 = new HumanPlayer(Console.ReadLine());
+		
+		do
+		{
+			Console.Write("Input second player's name : ");
+			name= Console.ReadLine();
+			player2 = new HumanPlayer(name);
+		} while (name == "" || player2.GetName() == "");
+		// IPlayer player2 = new HumanPlayer(name);
 		gameRunner.AddPlayer(player2);
+		
+		Tools.SmallSpace();
 		Console.WriteLine($"Welcome {player1.GetName()} and {player2.GetName()}");
 		Tools.SmallSpace();
 		

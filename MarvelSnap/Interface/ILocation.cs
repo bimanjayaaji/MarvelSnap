@@ -7,4 +7,7 @@ public interface ILocation
 	string? GetName();
 	LocationType GetSkill();
 	string? GetDesc();
+	LocApplyType GetApplyType(); 
+    bool IsRevealed();
+    bool SetIsRevealed(bool state);
 }

@@ -1,4 +1,4 @@
-using  MarvelSnapInterface;
+using MarvelSnapInterface;
 using MarvelSnapEnum;
 using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
@@ -47,7 +47,7 @@ public class GameRunner
 			{
 				foreach (IPlayer assigned in _playerInfo.Keys)
 				{
-					if (assigned.GetId() == player.GetId()) // checking if id's already assigned
+					if (assigned.GetId() == player.GetId() || assigned.GetName() == player.GetName()) // checking if id or name has already assigned
 					{
 						return false;			
 					}
@@ -94,6 +94,8 @@ public class GameRunner
 		string fullPath = Path.Combine(currentFolder,@"Database\Cards.json");
 		FileStream stream = new FileStream(fullPath, FileMode.OpenOrCreate);
 		_allCards = (List<Card>)ser?.ReadObject(stream);
+		
+		// could use json filtering data based on id, instead of generating all cards
 		
 		return true;
 	}
@@ -163,7 +165,8 @@ public class GameRunner
 		
 		foreach (var ind in randomList)
 		{
-			Card chosenCard = JsonConvert.DeserializeObject<Card>(JsonConvert.SerializeObject(_allCards[ind]));
+			// Card chosenCard = JsonConvert.DeserializeObject<Card>(JsonConvert.SerializeObject(_allCards[ind]));
+			Card chosenCard = _allCards[ind].DeepCopy();
 			playerConfig.AddCardDeck(chosenCard);	
 			// playerConfig.AddCardDeck(_allCards[ind]);	
 		}
@@ -180,7 +183,8 @@ public class GameRunner
 	public bool SetCardsToPlayer(IPlayer player, Card card)
 	{
 		PlayerConfig playerConfig = _playerInfo[player];
-		Card chosenCard = JsonConvert.DeserializeObject<Card>(JsonConvert.SerializeObject(card));
+		// Card chosenCard = JsonConvert.DeserializeObject<Card>(JsonConvert.SerializeObject(card));
+		Card chosenCard = card.DeepCopy();
 		playerConfig.AddCardDeck(chosenCard);
 		
 		return true;
@@ -705,4 +709,4 @@ public class GameRunner
 	{
 		return _gameStatus;
 	}
-}
+} 

@@ -9,7 +9,7 @@ namespace MarvelSnap;
 /// and some methods to access and set the value of the attributes. Using DataContract
 /// so that it can be used to generate all cards from .json file in GameRunner.
 /// </summary>
-[DataContract] public class Card : ICard, ICardAbility
+[DataContract] public class Card : ICard, ICardAbility, ICloneable
 {
 	[DataMember] private int _id;
 	[DataMember] private string? _name;
@@ -43,7 +43,29 @@ namespace MarvelSnap;
 		_performed = false;
 		_locEffect = false;
 	}
-	
+
+	public object Clone()
+	{
+		return this.MemberwiseClone();
+	}
+
+	// Deep Clone Method
+	public Card DeepCopy()
+	{
+		Card clone = (Card)this.MemberwiseClone();
+		//clone._id = _id;
+		clone._name = _name;
+		//clone._type = _type;
+		//clone._applyType = _applyType;
+		//clone._energyCost = _energyCost;
+		//clone._attackingPower = _attackingPower;
+		//clone._placed = _placed;
+		//clone._performed = _performed;
+		//clone._locEffect = _locEffect;
+		clone._description = _description;
+		return clone;
+	}
+
 	public int GetId()
 	{
 		return _id;
