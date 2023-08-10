@@ -1,6 +1,7 @@
 using MarvelSnap;
 using MarvelSnapInterface;
 using MarvelSnapTools;
+namespace MainProgram;
 
 partial class Program
 {
