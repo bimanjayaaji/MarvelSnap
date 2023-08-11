@@ -2,13 +2,21 @@
 using MarvelSnapEnum;
 using MarvelSnapInterface;
 using MarvelSnapTools;
+using NLog;
 namespace MainProgram;
 
 partial class Program
 {
+	private static Logger logger;
+
 	static void Main()
-	{		
-		GamePlay_Testing();
+	{
+		var nlogConfigPath = Path.Combine(Directory.GetCurrentDirectory(), ".\\Log\\nlog.config");
+		// LogManager.Setup().LoadConfigurationFromFile(nlogConfigPath);
+		LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(nlogConfigPath);
+		logger = LogManager.GetCurrentClassLogger();
+		
+		// GamePlay_Testing();
 	}
 
 	static void GamePlay_Testing()
@@ -16,11 +24,13 @@ partial class Program
 		// DECLARATION
 		GameRunner gameRunner = new();
 		List<Location> locations = new();
-		
+
 		// INTRO
 		Console.Clear();
 		Console.WriteLine("--- WELCOME TO MARVELSNAP! ---"); 
 		Tools.SmallSpace();
+		
+		logger.Info("asdasdasd");
 		
 		// ENTER PLAYER'S IDENTITY
 		string name;
@@ -161,6 +171,4 @@ partial class Program
 		
 		GameDisplay3_Testing(gameRunner);
 	}
-	
-	
 }
