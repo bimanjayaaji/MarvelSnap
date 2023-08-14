@@ -7,7 +7,7 @@ namespace MainProgram;
 
 partial class Program
 {
-	private static Logger logger;
+	private static Logger? logger;
 
 	static void Main()
 	{
@@ -16,7 +16,10 @@ partial class Program
 		LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(nlogConfigPath);
 		logger = LogManager.GetCurrentClassLogger();
 		
-		// GamePlay_Testing();
+		logger.Info("asdasd");
+		Console.ReadKey();
+		
+		GamePlay_Testing();
 	}
 
 	static void GamePlay_Testing()
@@ -30,10 +33,10 @@ partial class Program
 		Console.WriteLine("--- WELCOME TO MARVELSNAP! ---"); 
 		Tools.SmallSpace();
 		
-		logger.Info("asdasdasd");
+		logger?.Info("asdasdasd");
 		
 		// ENTER PLAYER'S IDENTITY
-		string name;
+		string? name;
 		IPlayer player1, player2;
 		do 
 		{
@@ -89,37 +92,50 @@ partial class Program
 					bool endTurn = false;
 					while (!cardValid)
 					{
-						Tools.Print("Insert Card's index to place Card (0 to pass turn): ");
-						int cardIndex = 0;
-						bool marker = int.TryParse(Tools.Readln(), out cardIndex);
-						while(!marker || cardIndex > gameRunner.GetPlayerCards(player).Count)
+						bool marker;
+						int cardIndex;
+						do
 						{
-							Tools.Println("Invalid");
 							Tools.Print("Insert Card's index to place Card (0 to pass turn): ");
 							marker = int.TryParse(Tools.Readln(), out cardIndex);
-						};
-						
+							if (!marker || cardIndex > gameRunner.GetPlayerCards(player).Count)
+							{
+								Tools.Println("Invalid");
+								marker = false;
+							}
+						} while(!marker);
+
 						if (cardIndex == 0)
 						{
 							endTurn = true;
 							break;
 						}
-						
+
 						if (gameRunner.CheckCardValid(player, cardIndex))
 						{
-							Tools.Print("Insert Location's index to place Card : ");
-							int locIndex = 0; 
-							bool marker1 = int.TryParse(Tools.Readln(), out locIndex);
-							bool locCond = gameRunner.CheckLocFull(locIndex,player);
-							while(!marker1 || !locCond || locIndex > gameRunner.GetLocations().Count ||
-									locIndex < 1)
+							int locIndex;
+							bool marker1;
+							bool locCond;
+							do
 							{
-								Tools.Println("Invalid or Locations is full (4 max)");
-								Tools.Print("Insert Location's index to place Card : ");
+								Tools.Print("Insert Location's index to place Card (0 to pass turn): ");
 								marker1 = int.TryParse(Tools.Readln(), out locIndex);
 								locCond = gameRunner.CheckLocFull(locIndex,player);
-							};
-							gameRunner.PlayerPlaceCard(player, cardIndex, locIndex); // delegate
+								if (!marker1 || !locCond || locIndex > gameRunner.GetLocations().Count)
+								{
+									if (locIndex == 0){break;}
+									Tools.Println("Invalid or Locations is full (4 max)");
+									marker1 = false;
+								}	
+							} while(!marker1);
+							
+							if (locIndex == 0)
+							{
+								endTurn = true;
+								break;
+							}
+
+							gameRunner.PlayerPlaceCard(player, cardIndex, locIndex);
 							cardValid = true;
 						}
 						else

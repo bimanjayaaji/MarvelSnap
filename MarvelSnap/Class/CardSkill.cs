@@ -74,29 +74,29 @@ public static class CardSkill
 	/// <returns></returns>
 	public static bool ApplyOnGoingCards(GameRunner gameRunner)
 	{
-		foreach (Location loc in gameRunner.GetLocations())
+		var locations = gameRunner.GetLocations();
+		var players = gameRunner.GetPlayers();
+
+		foreach (var loc in locations)
 		{
-			foreach (IPlayer player in gameRunner.GetPlayers())
+			foreach (var player in players)
 			{
-				foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))
+				var ongoingCards = gameRunner.GetPlayerCardsOnLoc(loc, player)
+											 .Where(card => card.GetApplyType() == CardApplyType.OnGoing && !card.IsPerformed());
+											 
+				foreach (var card in ongoingCards) // logic cardskill inside this loop
 				{
-					if (card.GetApplyType() == CardApplyType.OnGoing)
+					if (card.GetSkill() == CardType.CombinedWith_3Cards_IncreaseBy3)
 					{
-						if (!card.IsPerformed()) // logic for ongoing cards here and beyond
+						var playerCards = gameRunner.GetLocationInfo()[loc].GetLocInfo()[player];
+						if (playerCards.Count == 4)
 						{
-							if (card.GetSkill() == CardType.CombinedWith_3Cards_IncreaseBy3)
-							{
-								List<Card> playerCards = gameRunner.GetLocationInfo()[loc].GetLocInfo()[player];
-								if(playerCards.Count == 4)
-									{
-										gameRunner.GetLocationInfo()[loc].AddScore(player, 3);
-										card.SetIsPerformed(true);
-									}
-							}
+							gameRunner.GetLocationInfo()[loc].AddScore(player, 3);
+							card.SetIsPerformed(true);
 						}
 					}
 				}
-			}			
+			}
 		}
 		return true;
 	}	

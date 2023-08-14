@@ -19,73 +19,72 @@ public static class LocationSkill
 	/// <param name="gameRunner"></param>
 	/// <returns></returns>
 	public static bool ApplyOnGoingLocs(GameRunner gameRunner)
-	{
-		foreach (var loc in gameRunner.GetLocations())
+	{	
+		var locations = gameRunner.GetLocations();
+		foreach (var loc in locations)
 		{
-			if (loc.GetApplyType() == LocApplyType.OnGoing)
+			if (loc.GetApplyType() == LocApplyType.OnGoing && loc.IsRevealed())
 			{
-				if (loc.IsRevealed())
+				switch (loc.GetSkill())
 				{
-					switch (loc.GetSkill())
-					{
-						case LocationType.Normal:
-							return true;
+					case LocationType.Normal:
+						return true;
 
-						case LocationType.CardsHere_IncreaseBy5:
-							foreach (var player in gameRunner.GetPlayers())
+					case LocationType.CardsHere_IncreaseBy5:
+						foreach (var player in gameRunner.GetPlayers())
+						{
+							foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))
 							{
-								foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))
+								if (!card.IsLocEffect())
 								{
-									if (!card.IsLocEffect())
+									gameRunner.GetLocationInfo()[loc].AddScore(player, 5);
+									card.SetIsLocEffect(true);
+								}
+							}
+						}
+						return true;
+
+					case LocationType.PlayHere_AddACopy:
+						foreach (var player in gameRunner.GetPlayers())
+						{
+							foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))
+							{
+								if (!card.IsLocEffect())
+								{
+									gameRunner.SetCardsToPlayer(player, card);
+									card.SetIsLocEffect(true);
+								}
+							}
+						}
+						return true;
+
+					case LocationType.IfOnlyOne_IncreaseBy5:
+						foreach (var player in gameRunner.GetPlayers())
+						{
+							List<Card> cards = gameRunner.GetPlayerCardsOnLoc(loc, player);
+							if (cards.Count == 1)
+							{
+								if (!cards[0].IsLocEffect())
+								{
+									gameRunner.GetLocationInfo()[loc].AddScore(player, 5);
+									cards[0].SetIsLocEffect(true);
+								}
+							}
+							else if (cards.Count > 1)
+							{
+								foreach (var card in cards)
+								{
+									if (card.IsLocEffect())
 									{
-										gameRunner.GetLocationInfo()[loc].AddScore(player, 5);
-										card.SetIsLocEffect(true);
+										gameRunner.GetLocationInfo()[loc].AddScore(player, -5);
+										cards[0].SetIsLocEffect(false);
 									}
 								}
 							}
-							return true;
-
-						case LocationType.PlayHere_AddACopy:
-							foreach (var player in gameRunner.GetPlayers())
-							{
-								foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))
-								{
-									if (!card.IsLocEffect())
-									{
-										gameRunner.SetCardsToPlayer(player, card);
-										card.SetIsLocEffect(true);
-									}
-								}
-							}
-							return true;
-
-						case LocationType.IfOnlyOne_IncreaseBy5:
-							foreach (var player in gameRunner.GetPlayers())
-							{
-								List<Card> cards = gameRunner.GetPlayerCardsOnLoc(loc, player);
-								if (cards.Count == 1)
-								{
-									if (!cards[0].IsLocEffect())
-									{
-										gameRunner.GetLocationInfo()[loc].AddScore(player, 5);
-										cards[0].SetIsLocEffect(true);
-									}
-								}
-								else if (cards.Count > 1)
-								{
-									foreach (var card in cards)
-									{
-										if (card.IsLocEffect())
-										{
-											gameRunner.GetLocationInfo()[loc].AddScore(player, -5);
-											cards[0].SetIsLocEffect(false);
-										}
-									}
-								}
-							}
-							return true;
-					}
+						}
+						return true;
 				}
+
 			}
 		}
 		return false;

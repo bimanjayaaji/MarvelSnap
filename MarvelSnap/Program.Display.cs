@@ -46,10 +46,14 @@ partial class Program
 		List<Card> playerCards = gameRunner.GetPlayerCards(player);
 		Tools.Println($"{player.GetName()} ==> Energy : {gameRunner.GetPlayerEnergy(player)}");
 		Tools.Println("Cards :");
-		Tools.Println("| idx | NAME / COST / ATTACK / DESCRIPTION");
+		Tools.Println("| idx | NAME");
+		Tools.Println("|     | COST / ATTACK / DESCRIPTION");
+		Tools.Println("|     |");
 		foreach (var card in playerCards)
 		{
-			Tools.Println($"|  {playerCards.IndexOf(card)+1}  | {card.GetName()} / {card.GetEnergyCost()} / {card.GetAttackingPower()} / {card.GetDesc()}");
+			Tools.Println($"|  {playerCards.IndexOf(card)+1}  | {card.GetName()}");
+			Tools.Println($"|     | {card.GetEnergyCost()} / {card.GetAttackingPower()} / {card.GetDesc()}");
+			Tools.Println("|     |");
 		}
 	}
 
@@ -65,14 +69,12 @@ partial class Program
 			if (kvp.Value == null)
 			{
 				Tools.Print($"Location : {kvp.Key.GetName()} ---> Winner : DRAW ");		
-				Tools.Println($"({gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[0])} / {gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[1])})");
 			} 
 			else
 			{
 				Tools.Print($"Location : {kvp.Key.GetName()} ---> Winner : {kvp.Value.GetName()} ");
-				Tools.Println($"({gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[0])} / {gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[1])})");
 			}
-			
+			Tools.Println($"({gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[0])} / {gameRunner.GetLocationScore(kvp.Key, gameRunner.GetPlayers()[1])})");
 		}
 		Console.ReadKey();
 	}
