@@ -8,11 +8,11 @@
 - [x] Add ComputeScore method in LocationConfig to compute score in a location. Set to private, and called everytime GetPlayersScore is invoked (Assigned : 230731. Done : 230801 ) --> check!
 - [x] Add GetWinner method in LocationConfig (Assigned : 230731. Done : 230801 )
 - [x] Add GetLocationWinner method in GR and its overload using Location param (Assigned : 230731. Done : 230801 )
-- [ ] Modify GetLocationScore (Assigned : 230801. Done : _ )
+- [x] Modify GetLocationScore (Assigned : 230801. Done : _ )
 - [x] Construct Display-Locations relations between GR and Program in GamePlay_Testing() (Assigned : 230801. Done : 230802 )
 - [x] Construct Reveal Cards (Assigned : 230801. Done : 230802 )
 - [x] Construct Execute Cards (Assigned : 230801. Done : 230805 )
-- [ ] Construct Execute Locations in GR (Assigned : 230801. Done : _ )
+- [x] Construct Execute Locations in GR (Assigned : 230801. Done : _ )
 - [x] **!!!! EVALUATE PLAYER'S ENERGY WHEN CHOOSING CARD !!!!** (Assigned : 230802. Done : 230803 )
 - [x] **!!! NARUH LEBIH DARI SATU KARTU !!!** (Assigned : 230803. Done : _ )
 - [x] Every loc, every player, max 4 cards (Assigned : 230802. Done : 230805 )
@@ -35,13 +35,13 @@
 1. Major
    - [x] onreveal card skill --> 4 (Assigned : 230805. Done : 230805 )
    - [x] ongoing card skill --> 4 (Assigned : 230805. Done : 230805 )
-   - [ ] location skill (Assigned : 230801. Done : _ )
+   - [x] location skill (Assigned : 230801. Done : _ )
    - [x] delegates
    - [x] 4 max cards on each location (Assigned : 230805. Done : 230805 )
-   - [ ] 0 to pass turn on insert location index to place card prompt (Assigned : 230805. Done : _ )
+   - [x] 0 to pass turn on insert location index to place card prompt (Assigned : 230805. Done : _ )
    - [ ] rapihin code. hapus yang ga perlu
    - [ ] check DRY in overload methods
-   - [ ] update class diagram
+   - [x] update class diagram
 2. Minor
    - [ ] display "location 1" and "Location 2" in the early round (Assigned : 230805. Done : _ )
    - [ ] pas player nempatin kartu di board, ga langsung munculin skor tapi nunggu semua player masukin kartu ke board. jadi di akhir round baru nampilin skor (Assigned : 230805. Done : _ )
@@ -52,4 +52,8 @@
 1. LocationSkill !!!
    - [ ] belom apply OnPlacing location skill
    - [ ] kadang masi ada bug di location nomer 3. still dont know why. kadang juga di loc 2.
+
+## 23-08-15 task
+- [x] Bug in LocationSkillOnGoing
+- [ ] Apply LocationSkillOnPlacing
    

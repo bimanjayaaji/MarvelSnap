@@ -23,66 +23,113 @@ public static class LocationSkill
 		var locations = gameRunner.GetLocations();
 		foreach (var loc in locations)
 		{
+			// Console.WriteLine("Entering foreach (var loc in locations)");
+			// Console.ReadKey();
+			
 			if (loc.GetApplyType() == LocApplyType.OnGoing && loc.IsRevealed())
 			{
+				// Console.WriteLine("Entering if (loc.GetApplyType() == LocApplyType.OnGoing && loc.IsRevealed())");
+				// Console.ReadKey();
+				
 				switch (loc.GetSkill())
-				{
+				{					
 					case LocationType.Normal:
-						return true;
+						// Console.WriteLine("Entering case LocationType.Normal:");
+						// Console.WriteLine("Not doing anything");
+						// Console.ReadKey();	
+						break;
 
 					case LocationType.CardsHere_IncreaseBy5:
+						// Console.WriteLine("Entering case LocationType.CardsHere_IncreaseBy5:");
+						// Console.ReadKey();
 						foreach (var player in gameRunner.GetPlayers())
 						{
+							// Console.WriteLine("Entering foreach (var player in gameRunner.GetPlayers())");
+							// Console.ReadKey();
 							foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))
 							{
+								// Console.WriteLine("Entering foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))");
+								// Console.ReadKey();
 								if (!card.IsLocEffect())
 								{
+									// Console.WriteLine("Entering if (!card.IsLocEffect())");
+									// Console.ReadKey();
 									gameRunner.GetLocationInfo()[loc].AddScore(player, 5);
 									card.SetIsLocEffect(true);
+									// Console.WriteLine("Successfully applied LocationType.CardsHere_IncreaseBy5 effect");
+									// Console.ReadKey();
 								}
 							}
 						}
-						return true;
+						break;
 
 					case LocationType.PlayHere_AddACopy:
+						// Console.WriteLine("Entering case LocationType.PlayHere_AddACopy:");
+						// Console.ReadKey();
 						foreach (var player in gameRunner.GetPlayers())
 						{
+							// Console.WriteLine("Entering foreach (var player in gameRunner.GetPlayers())");
+							// Console.ReadKey();
 							foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))
 							{
+								// Console.WriteLine("Entering foreach (Card card in gameRunner.GetPlayerCardsOnLoc(loc, player))");
+								// Console.ReadKey();
 								if (!card.IsLocEffect())
 								{
+									// Console.WriteLine("Entering if (!card.IsLocEffect())");
+									// Console.ReadKey();
 									gameRunner.SetCardsToPlayer(player, card);
 									card.SetIsLocEffect(true);
+									// Console.WriteLine("Successfully applied LocationType.PlayHere_AddACopy: effect");
+									// Console.ReadKey();
 								}
 							}
 						}
-						return true;
+						break;
 
 					case LocationType.IfOnlyOne_IncreaseBy5:
+						// Console.WriteLine("Entering case LocationType.IfOnlyOne_IncreaseBy5:");
+						// Console.ReadKey();
 						foreach (var player in gameRunner.GetPlayers())
 						{
+							// Console.WriteLine("Entering foreach (var player in gameRunner.GetPlayers())");
+							// Console.ReadKey();
 							List<Card> cards = gameRunner.GetPlayerCardsOnLoc(loc, player);
 							if (cards.Count == 1)
 							{
+								// Console.WriteLine("Entering if (cards.Count == 1)");
+								// Console.ReadKey();
 								if (!cards[0].IsLocEffect())
 								{
+									// Console.WriteLine("Entering if (!cards[0].IsLocEffect())");
+									// Console.ReadKey();
 									gameRunner.GetLocationInfo()[loc].AddScore(player, 5);
 									cards[0].SetIsLocEffect(true);
+									// Console.WriteLine("Successfully applied LocationType.IfOnlyOne_IncreaseBy5 (only 1, add 5)");
+									// Console.ReadKey();
 								}
 							}
 							else if (cards.Count > 1)
 							{
+								// Console.WriteLine("Entering else if (cards.Count > 1)");
+								// Console.ReadKey();
 								foreach (var card in cards)
 								{
+									// Console.WriteLine("Entering foreach (var card in cards)");
+									// Console.ReadKey();
 									if (card.IsLocEffect())
 									{
+										// Console.WriteLine("Entering if (card.IsLocEffect())");
+										// Console.ReadKey();
 										gameRunner.GetLocationInfo()[loc].AddScore(player, -5);
 										cards[0].SetIsLocEffect(false);
+										// Console.WriteLine("Successfully applied LocationType.IfOnlyOne_IncreaseBy5 (more than 1, decrease 5)");
+										// Console.ReadKey();
 									}
 								}
 							}
 						}
-						return true;
+						break;
 				}
 
 			}

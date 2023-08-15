@@ -16,8 +16,7 @@ partial class Program
 		LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(nlogConfigPath);
 		logger = LogManager.GetCurrentClassLogger();
 		
-		logger.Info("asdasd");
-		Console.ReadKey();
+		// logger.Info("asdasd"); // still not running no idea why
 		
 		GamePlay_Testing();
 	}
